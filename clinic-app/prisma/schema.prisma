@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("patient")
+  phone     String?
+  created_at DateTime @default(now())
+
+  doctor        Doctor?
+  appointments  Appointment[] @relation("patientAppointments")
+  prescriptions Prescription[]
+}
+
+model Doctor {
+  id             Int      @id @default(autoincrement())
+  user_id        Int      @unique
+  specialization String
+  qualification  String
+  experience     Int
+  fee            Float
+  bio            String?
+  avatar         String?
+  is_active      Boolean  @default(true)
+
+  user          User           @relation(fields: [user_id], references: [id])
+  availability  Availability[]
+  appointments  Appointment[]
+  prescriptions Prescription[]
+}
+
+model Availability {
+  id            Int    @id @default(autoincrement())
+  doctor_id     Int
+  day_of_week   String
+  start_time    String
+  end_time      String
+  slot_duration Int    @default(30)
+
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
+}
+
+model Appointment {
+  id               Int      @id @default(autoincrement())
+  patient_id       Int
+  doctor_id        Int
+  appointment_date DateTime
+  appointment_time String
+  status           String   @default("pending")
+  reason           String?
+  notes            String?
+  created_at       DateTime @default(now())
+
+  patient      User         @relation("patientAppointments", fields: [patient_id], references: [id])
+  doctor       Doctor       @relation(fields: [doctor_id], references: [id])
+  prescription Prescription?
+}
+
+model Prescription {
+  id             Int      @id @default(autoincrement())
+  appointment_id Int      @unique
+  doctor_id      Int
+  patient_id     Int
+  medicines      String
+  instructions   String?
+  created_at     DateTime @default(now())
+
+  appointment Appointment @relation(fields: [appointment_id], references: [id])
+  doctor      Doctor      @relation(fields: [doctor_id], references: [id])
+  patient     User        @relation(fields: [patient_id], references: [id])
+}
