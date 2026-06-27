@@ -115,29 +115,29 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how-it-works" style={{ padding: '100px 24px', background: 'rgba(16,16,24,0.6)', borderTop: '1px solid rgba(42,42,58,0.5)', borderBottom: '1px solid rgba(42,42,58,0.5)' }}>
+      <section id="how-it-works" style={{ padding: '80px 24px', borderTop: '1px solid rgba(42,42,58,0.5)', borderBottom: '1px solid rgba(42,42,58,0.5)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '72px' }}>
-            <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>Process</span>
-            <h2 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1.5px' }}>How It Works</h2>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>Process</span>
+            <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1px' }}>How It Works</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
             {steps.map((step, i) => <StepCard key={i} step={step} />)}
           </div>
         </div>
       </section>
 
-      <section style={{ padding: '100px 24px', maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '72px' }}>
-          <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>Why Pulse</span>
-          <h2 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1.5px' }}>Built for your peace of mind</h2>
+      <section style={{ padding: '80px 24px', maxWidth: '1280px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>Why Pulse</span>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1px' }}>Built for your peace of mind</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
           {features.map((f, i) => <FeatureCard key={i} feature={f} />)}
         </div>
       </section>
 
-      <section style={{ padding: '80px 24px' }}>
+      <section style={{ padding: '60px 24px' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(167,139,250,0.1))', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '24px', padding: '64px 48px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 0%, rgba(99,102,241,0.2) 0%, transparent 60%)', pointerEvents: 'none' }} />
           <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1.5px', marginBottom: '20px', position: 'relative' }}>Ready to take control of your health?</h2>
@@ -160,14 +160,13 @@ function StepCard({ step }: { step: typeof steps[0] }) {
   const [hovered, setHovered] = useState(false)
   const Icon = step.icon
   return (
-    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ background: hovered ? 'rgba(30,30,42,0.9)' : 'rgba(22,22,31,0.7)', border: hovered ? `1px solid ${step.color}40` : '1px solid rgba(42,42,58,0.6)', borderRadius: '20px', padding: '36px 28px', transition: 'all 0.3s ease', boxShadow: hovered ? `0 8px 40px ${step.color}20` : 'none', cursor: 'default' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-        <div style={{ width: '52px', height: '52px', background: `${step.color}18`, border: `1px solid ${step.color}30`, borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: step.color }}><Icon size={24} /></div>
-        <span style={{ fontSize: '13px', fontWeight: '700', color: step.color, opacity: 0.5, letterSpacing: '1px', fontFamily: 'monospace' }}>{step.num}</span>
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ background: hovered ? 'rgba(30,30,42,0.9)' : 'rgba(22,22,31,0.7)', border: hovered ? `1px solid ${step.color}40` : '1px solid rgba(42,42,58,0.6)', borderRadius: '14px', padding: '24px 20px', transition: 'all 0.25s ease', boxShadow: hovered ? `0 8px 30px ${step.color}15` : 'none', cursor: 'default' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+        <div style={{ width: '38px', height: '38px', background: `${step.color}18`, border: `1px solid ${step.color}30`, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: step.color }}><Icon size={18} /></div>
+        <span style={{ fontSize: '11px', fontWeight: '700', color: step.color, opacity: 0.4, letterSpacing: '1px', fontFamily: 'monospace', marginLeft: 'auto' }}>{step.num}</span>
       </div>
-      <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#f0f0ff', marginBottom: '12px' }}>{step.title}</h3>
-      <p style={{ fontSize: '14px', color: '#8888aa', lineHeight: '1.7' }}>{step.desc}</p>
-      <div style={{ width: hovered ? '48px' : '24px', height: '2px', background: step.color, borderRadius: '2px', marginTop: '24px', transition: 'width 0.3s ease' }} />
+      <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#f0f0ff', marginBottom: '6px' }}>{step.title}</h3>
+      <p style={{ fontSize: '13px', color: '#8888aa', lineHeight: '1.6' }}>{step.desc}</p>
     </div>
   )
 }

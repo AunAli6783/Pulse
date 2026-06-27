@@ -20,10 +20,10 @@ export default function AdminDashboard() {
         <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-0.5px', marginBottom: '32px' }}>Admin Dashboard</h1>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px', marginBottom: '32px' }}>
-          <StatsCard title="Total Patients" value={stats.totalPatients} icon={Users} />
-          <StatsCard title="Today's Appointments" value={stats.todayAppointments} icon={Calendar} />
-          <StatsCard title="Monthly Appointments" value={stats.monthlyAppointments} icon={Calendar} />
-          <StatsCard title="Monthly Revenue" value={`$${Number(stats.monthlyRevenue).toFixed(2)}`} icon={BarChart3} />
+          <StatsCard title="Total Patients" value={stats.totalPatients} icon={Users} href="/admin/patients" />
+          <StatsCard title="Today's Appointments" value={stats.todayAppointments} icon={Calendar} href="/admin/appointments?filter=today" />
+          <StatsCard title="Monthly Appointments" value={stats.monthlyAppointments} icon={Calendar} href="/admin/appointments?filter=month" />
+          <StatsCard title="Monthly Revenue" value={`$${Number(stats.monthlyRevenue).toFixed(2)}`} icon={BarChart3} href="/admin/reports" />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
@@ -31,10 +31,14 @@ export default function AdminDashboard() {
             <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#f0f0ff', marginBottom: '16px' }}>Status Breakdown</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {stats.statusBreakdown?.map((s: any) => (
-                <div key={s.status} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(10,10,15,0.3)', borderRadius: '8px' }}>
-                  <span style={{ color: '#f0f0ff', fontWeight: '500', textTransform: 'capitalize', fontSize: '14px' }}>{s.status}</span>
-                  <span style={{ color: '#818cf8', fontWeight: '700', fontSize: '16px' }}>{s.count}</span>
-                </div>
+                <Link key={s.status} href={`/admin/appointments?status=${s.status}`} style={{ textDecoration: 'none' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(10,10,15,0.3)', borderRadius: '8px', transition: 'all 0.2s', cursor: 'pointer' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.1)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(10,10,15,0.3)' }}>
+                    <span style={{ color: '#f0f0ff', fontWeight: '500', textTransform: 'capitalize', fontSize: '14px' }}>{s.status}</span>
+                    <span style={{ color: '#818cf8', fontWeight: '700', fontSize: '16px' }}>{s.count}</span>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
