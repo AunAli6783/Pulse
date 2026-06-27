@@ -3,62 +3,71 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import StatusBadge from '@/components/ui/StatusBadge'
+import { ClipboardList, Clock, Pill, User, LayoutDashboard } from 'lucide-react'
+
+const links = [
+  { href: '/doctor/appointments', title: 'Appointments', desc: 'View all your appointments', icon: ClipboardList },
+  { href: '/doctor/availability', title: 'Availability', desc: 'Set your weekly schedule', icon: Clock },
+  { href: '/doctor/prescriptions', title: 'Prescriptions', desc: 'Write and view prescriptions', icon: Pill },
+  { href: '/doctor/profile', title: 'Profile', desc: 'Update your details', icon: User },
+]
 
 export default function DoctorDashboard() {
   const { data: session } = useSession()
   const [todayApps, setTodayApps] = useState<any[]>([])
 
   useEffect(() => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
-      .then((apps) => {
-        const today = new Date().toISOString().split('T')[0]
-        setTodayApps(apps.filter((a: any) => a.appointment_date?.startsWith(today)))
-      })
+    fetch('/api/appointments').then((r) => r.json()).then((apps) => {
+      const today = new Date().toISOString().split('T')[0]
+      setTodayApps(apps.filter((a: any) => a.appointment_date?.startsWith(today)))
+    })
   }, [])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-2">Doctor Dashboard</h1>
-      <p className="text-gray-500 mb-8">Welcome, {session?.user?.name}</p>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {[
-          { href: '/doctor/appointments', title: 'Appointments', desc: 'View all your appointments' },
-          { href: '/doctor/availability', title: 'Availability', desc: 'Set your weekly schedule' },
-          { href: '/doctor/prescriptions', title: 'Prescriptions', desc: 'Write and view prescriptions' },
-          { href: '/doctor/profile', title: 'Profile', desc: 'Update your details' },
-        ].map((item) => (
-          <Link key={item.href} href={item.href}>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
-              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-              <p className="text-gray-500 text-sm">{item.desc}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <h2 className="text-xl font-semibold mb-4">Today's Appointments</h2>
-      {todayApps.length === 0 ? (
-        <p className="text-gray-500">No appointments today.</p>
-      ) : (
-        <div className="space-y-3">
-          {todayApps.map((appt: any) => (
-            <div key={appt.id} className="bg-white rounded-lg border border-gray-200 p-4 flex justify-between items-center">
-              <div>
-                <p className="font-medium">{appt.patient?.name}</p>
-                <p className="text-sm text-gray-500">{appt.appointment_time}</p>
-              </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                appt.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                appt.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
-                'bg-green-100 text-green-800'
-              }`}>
-                {appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}
-              </span>
-            </div>
-          ))}
+    <div className="grid-bg" style={{ minHeight: '100vh', background: '#0a0a0f', padding: '100px 24px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+          <LayoutDashboard size={24} style={{ color: '#6366f1' }} />
+          <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-0.5px' }}>Doctor Dashboard</h1>
         </div>
-      )}
+        <p style={{ color: '#8888aa', fontSize: '15px', marginBottom: '40px', marginLeft: '34px' }}>Welcome, {session?.user?.name}</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '20px', marginBottom: '48px' }}>
+          {links.map((item) => {
+            const Icon = item.icon
+            return (
+              <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', padding: '24px', transition: 'all 0.25s ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'; e.currentTarget.style.background = 'rgba(30,30,42,0.9)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(42,42,58,0.6)'; e.currentTarget.style.background = 'rgba(22,22,31,0.7)' }}
+                >
+                  <Icon size={28} style={{ color: '#818cf8', marginBottom: '12px' }} />
+                  <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#f0f0ff', marginBottom: '4px' }}>{item.title}</h3>
+                  <p style={{ color: '#8888aa', fontSize: '13px' }}>{item.desc}</p>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', marginBottom: '16px' }}>Today's Appointments</h2>
+        {todayApps.length === 0 ? (
+          <p style={{ color: '#555570', fontSize: '14px' }}>No appointments today.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {todayApps.map((appt: any) => (
+              <div key={appt.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '12px', padding: '16px 20px' }}>
+                <div>
+                  <p style={{ fontWeight: '600', color: '#f0f0ff' }}>{appt.patient?.name}</p>
+                  <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '2px' }}>{appt.appointment_time}</p>
+                </div>
+                <StatusBadge status={appt.status} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

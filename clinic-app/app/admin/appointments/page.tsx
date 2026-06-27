@@ -1,51 +1,47 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import StatusBadge from '@/components/ui/StatusBadge'
+import { Calendar } from 'lucide-react'
 
 export default function AdminAppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([])
 
   useEffect(() => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
-      .then(setAppointments)
+    fetch('/api/appointments').then((r) => r.json()).then(setAppointments)
   }, [])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">All Appointments</h1>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Patient</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Doctor</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Date</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Time</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((a: any) => (
-              <tr key={a.id} className="border-t">
-                <td className="px-6 py-4">{a.patient?.name}</td>
-                <td className="px-6 py-4">{a.doctor?.user?.name}</td>
-                <td className="px-6 py-4">{new Date(a.appointment_date).toLocaleDateString()}</td>
-                <td className="px-6 py-4">{a.appointment_time}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    a.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    a.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
-                    a.status === 'completed' ? 'bg-green-100 text-green-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {a.status.charAt(0).toUpperCase() + a.status.slice(1)}
-                  </span>
-                </td>
+    <div className="grid-bg" style={{ minHeight: '100vh', background: '#0a0a0f', padding: '100px 24px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
+          <Calendar size={24} style={{ color: '#6366f1' }} />
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-0.5px' }}>All Appointments</h1>
+        </div>
+        <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: 'rgba(10,10,15,0.5)' }}>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Patient</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Doctor</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Date</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Time</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {appointments.map((a: any) => (
+                <tr key={a.id} style={{ borderTop: '1px solid rgba(42,42,58,0.5)' }}>
+                  <td style={{ padding: '14px 20px', color: '#f0f0ff', fontWeight: '500', fontSize: '14px' }}>{a.patient?.name}</td>
+                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{a.doctor?.user?.name}</td>
+                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{new Date(a.appointment_date).toLocaleDateString()}</td>
+                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{a.appointment_time}</td>
+                  <td style={{ padding: '14px 20px' }}><StatusBadge status={a.status} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
