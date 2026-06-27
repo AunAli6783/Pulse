@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
-import { Heart, LogOut, User } from 'lucide-react'
+import { Heart, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3 } from 'lucide-react'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -18,6 +18,27 @@ export default function Navbar() {
 
   const dashboardHref = user?.role === 'patient' ? '/dashboard' : user?.role === 'doctor' ? '/doctor/dashboard' : '/admin/dashboard'
 
+  const patientLinks = [
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/dashboard/appointments', label: 'Appointments', icon: ClipboardList },
+    { href: '/dashboard/prescriptions', label: 'Prescriptions', icon: Pill },
+  ]
+  const doctorLinks = [
+    { href: '/doctor/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/doctor/appointments', label: 'Appointments', icon: ClipboardList },
+    { href: '/doctor/availability', label: 'Availability', icon: Clock },
+    { href: '/doctor/prescriptions', label: 'Prescriptions', icon: Pill },
+  ]
+  const adminLinks = [
+    { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/admin/appointments', label: 'Appointments', icon: ClipboardList },
+    { href: '/admin/doctors', label: 'Doctors', icon: Stethoscope },
+    { href: '/admin/patients', label: 'Patients', icon: Users },
+    { href: '/admin/reports', label: 'Reports', icon: BarChart3 },
+  ]
+
+  const roleLinks = user?.role === 'patient' ? patientLinks : user?.role === 'doctor' ? doctorLinks : adminLinks
+
   return (
     <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: scrolled ? 'rgba(10,10,15,0.92)' : 'rgba(10,10,15,0.6)', backdropFilter: 'blur(16px)', borderBottom: scrolled ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(42,42,58,0.4)', transition: 'all 0.3s ease' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem' }}>
@@ -28,15 +49,16 @@ export default function Navbar() {
             </div>
             <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Pulse</span>
           </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <NavLink href="/doctors">Find Doctors</NavLink>
             <NavLink href="/contact">Contact</NavLink>
-            <NavLink href="/#how-it-works">How It Works</NavLink>
-            <NavLink href="/#specialties">Specialties</NavLink>
             {session ? (
               <>
-                <NavLink href={dashboardHref}>Dashboard</NavLink>
-                <button onClick={() => signOut()} style={{ background: 'rgba(244,63,94,0.15)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.3)', padding: '8px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px' }}
+                {/* Role-specific links */}
+                {roleLinks.map((link) => (
+                  <NavLink key={link.href} href={link.href}>{link.label}</NavLink>
+                ))}
+                <button onClick={() => signOut()} style={{ background: 'rgba(244,63,94,0.15)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.3)', padding: '8px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '4px' }}
                   onMouseEnter={e => { (e.target as HTMLElement).style.background = 'rgba(244,63,94,0.25)'; (e.target as HTMLElement).style.borderColor = '#f43f5e' }}
                   onMouseLeave={e => { (e.target as HTMLElement).style.background = 'rgba(244,63,94,0.15)'; (e.target as HTMLElement).style.borderColor = 'rgba(244,63,94,0.3)' }}>
                   <LogOut size={14} /> Logout
@@ -44,6 +66,8 @@ export default function Navbar() {
               </>
             ) : (
               <>
+                <NavLink href="/#how-it-works">How It Works</NavLink>
+                <NavLink href="/#specialties">Specialties</NavLink>
                 <Link href="/login" style={{ color: '#8888aa', textDecoration: 'none', padding: '8px 14px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '6px' }}
                   onMouseEnter={e => (e.target as HTMLElement).style.color = '#f0f0ff'}
                   onMouseLeave={e => (e.target as HTMLElement).style.color = '#8888aa'}>
@@ -63,7 +87,7 @@ export default function Navbar() {
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} style={{ color: '#8888aa', textDecoration: 'none', padding: '8px 14px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', transition: 'all 0.2s ease' }}
+    <Link href={href} style={{ color: '#8888aa', textDecoration: 'none', padding: '8px 12px', borderRadius: '8px', fontSize: '14px', fontWeight: '500', transition: 'all 0.2s ease' }}
       onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = '#f0f0ff'; el.style.background = 'rgba(99,102,241,0.1)' }}
       onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = '#8888aa'; el.style.background = 'transparent' }}>
       {children}
