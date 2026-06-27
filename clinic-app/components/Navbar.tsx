@@ -26,7 +26,7 @@ export default function Navbar() {
             <div style={{ width: '34px', height: '34px', background: 'linear-gradient(135deg, #6366f1, #a78bfa)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}>
               <Heart size={18} color="white" />
             </div>
-            <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Clinic<span style={{ color: '#6366f1' }}>App</span></span>
+            <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Pulse</span>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <NavLink href="/doctors">Find Doctors</NavLink>

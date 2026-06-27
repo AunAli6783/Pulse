@@ -5,12 +5,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "ClinicApp — Book Doctors Online",
+  title: "Pulse — Book Doctors Online",
   description:
-    "Book appointments with top doctors in minutes. Trusted by 50,000+ patients. No sign-up hassle, no long waits — just seamless healthcare.",
-  keywords: "clinic, doctor appointment, book doctor, healthcare, online consultation",
+    "Book appointments with top doctors in minutes. Trusted by 50,000+ patients.",
+  keywords: "pulse, clinic, doctor appointment, book doctor, healthcare, online consultation",
   openGraph: {
-    title: "ClinicApp — Your Health, Our Priority",
+    title: "Pulse — Your Health, Our Priority",
     description: "Find & book top doctors instantly. Verified specialists across all fields.",
     type: "website",
   },

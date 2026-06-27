@@ -129,7 +129,7 @@ export default function Home() {
 
       <section style={{ padding: '100px 24px', maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '72px' }}>
-          <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>Why ClinicApp</span>
+          <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>Why Pulse</span>
           <h2 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1.5px' }}>Built for your peace of mind</h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
@@ -141,7 +141,7 @@ export default function Home() {
         <div style={{ maxWidth: '800px', margin: '0 auto', background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(167,139,250,0.1))', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '24px', padding: '64px 48px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 0%, rgba(99,102,241,0.2) 0%, transparent 60%)', pointerEvents: 'none' }} />
           <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1.5px', marginBottom: '20px', position: 'relative' }}>Ready to take control of your health?</h2>
-          <p style={{ color: '#8888aa', fontSize: '16px', marginBottom: '40px', position: 'relative' }}>Join thousands of patients who trust ClinicApp for their healthcare needs.</p>
+          <p style={{ color: '#8888aa', fontSize: '16px', marginBottom: '40px', position: 'relative' }}>Join thousands of patients who trust Pulse for their healthcare needs.</p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', position: 'relative' }}>
             <Link href="/register" style={{ background: 'linear-gradient(135deg, #6366f1, #818cf8)', color: 'white', textDecoration: 'none', padding: '14px 36px', borderRadius: '12px', fontSize: '16px', fontWeight: '700', boxShadow: '0 0 40px rgba(99,102,241,0.4)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               Create Free Account <ArrowRight size={18} />

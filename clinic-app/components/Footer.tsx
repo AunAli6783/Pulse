@@ -13,7 +13,7 @@ export default function Footer() {
             <div style={{ width: '34px', height: '34px', background: 'linear-gradient(135deg, #6366f1, #a78bfa)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Heart size={18} color="white" />
             </div>
-            <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Clinic<span style={{ color: '#6366f1' }}>App</span></span>
+            <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Pulse</span>
           </Link>
           <p style={{ color: '#555570', fontSize: '13px', lineHeight: '1.6', maxWidth: '220px' }}>
             Book appointments with top doctors in minutes. Trusted by 50,000+ patients across Pakistan.
@@ -81,7 +81,7 @@ export default function Footer() {
       </div>
 
       <div style={{ maxWidth: '1280px', margin: '0 auto', borderTop: '1px solid rgba(42,42,58,0.5)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-        <p style={{ color: '#333348', fontSize: '13px' }}>© 2026 ClinicApp. All rights reserved.</p>
+        <p style={{ color: '#333348', fontSize: '13px' }}>© 2026 Pulse. All rights reserved.</p>
         <p style={{ color: '#333348', fontSize: '13px' }}>
           Built by{' '}
           <a href="https://rajaaunali.netlify.app" target="_blank" rel="noopener noreferrer" style={{ color: '#6366f1', textDecoration: 'none' }}>Raja Aun Ali Khan</a>
