@@ -18,6 +18,7 @@ model User {
   doctor        Doctor?
   appointments  Appointment[] @relation("patientAppointments")
   prescriptions Prescription[]
+  reviews       Review[]      @relation("patientReviews")
 }
 
 model Doctor {
@@ -35,6 +36,7 @@ model Doctor {
   availability  Availability[]
   appointments  Appointment[]
   prescriptions Prescription[]
+  reviews       Review[]
 }
 
 model Availability {
@@ -62,6 +64,21 @@ model Appointment {
   patient      User         @relation("patientAppointments", fields: [patient_id], references: [id])
   doctor       Doctor       @relation(fields: [doctor_id], references: [id])
   prescription Prescription?
+  review       Review?
+}
+
+model Review {
+  id             Int      @id @default(autoincrement())
+  patient_id     Int
+  doctor_id      Int
+  appointment_id Int      @unique
+  rating         Int
+  comment        String?
+  created_at     DateTime @default(now())
+
+  patient     User        @relation("patientReviews", fields: [patient_id], references: [id])
+  doctor      Doctor      @relation(fields: [doctor_id], references: [id])
+  appointment Appointment @relation(fields: [appointment_id], references: [id])
 }
 
 model Prescription {

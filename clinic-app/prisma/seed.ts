@@ -223,8 +223,9 @@ async function main() {
     })
 
     const existing = await prisma.doctor.findUnique({ where: { user_id: user.id } })
+    let doctor: any
     if (!existing) {
-      const doctor = await prisma.doctor.create({
+      doctor = await prisma.doctor.create({
         data: {
           user_id: user.id,
           specialization: doc.specialization,
@@ -245,11 +246,61 @@ async function main() {
       })
       console.log(`✓ ${doc.name} (${doc.specialization}) — Rs. ${doc.fee}`)
     } else {
+      doctor = existing
       console.log(`  ${doc.name} already exists, skipping`)
     }
   }
 
+  // ── Sample Reviews ──
+  const patientUser = await prisma.user.findUnique({ where: { email: 'patient@clinic.com' } })
+  const allDoctors = await prisma.doctor.findMany({ take: 5 })
+  const reviewComments = [
+    'Excellent doctor, very thorough in examination. Highly recommended!',
+    'Great experience. The doctor listened to all my concerns patiently.',
+    'Very professional and knowledgeable. Made me feel comfortable throughout.',
+    'Good doctor but the waiting time was a bit long.',
+    'Amazing treatment! I saw results within a week.',
+    'Very kind and understanding. Explained everything in detail.',
+    'One of the best doctors I have visited. Very experienced.',
+    'Satisfied with the treatment. Will visit again if needed.',
+  ]
+
+  for (let i = 0; i < allDoctors.length; i++) {
+    const doc = allDoctors[i]
+    const pastDate = new Date()
+    pastDate.setDate(pastDate.getDate() - Math.floor(Math.random() * 60) - 5)
+
+    const appt = await prisma.appointment.create({
+      data: {
+        patient_id: patientUser!.id,
+        doctor_id: doc.id,
+        appointment_date: pastDate,
+        appointment_time: '10:00',
+        status: 'completed',
+        reason: 'Regular checkup',
+      },
+    })
+
+    const existingReview = await prisma.review.findUnique({ where: { appointment_id: appt.id } })
+    if (!existingReview) {
+      await prisma.review.create({
+        data: {
+          patient_id: patientUser!.id,
+          doctor_id: doc.id,
+          appointment_id: appt.id,
+          rating: Math.floor(Math.random() * 2) + 4, // 4 or 5
+          comment: reviewComments[i % reviewComments.length],
+        },
+      })
+    }
+  }
+  console.log('✓ Sample reviews added')
+
   await prisma.$disconnect()
+  console.log('\n✅ Seed complete! Use password "admin123" for all accounts.')
 }
 
-main().catch((e) => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

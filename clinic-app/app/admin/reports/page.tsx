@@ -1,15 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { BarChart3, TrendingUp, Users, Stethoscope, Calendar, Download, X } from 'lucide-react'
+import { BarChart3, TrendingUp, Users, Stethoscope, Calendar, Download, X, Star, MessageSquare } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 
 export default function AdminReports() {
   const [reports, setReports] = useState<any>(null)
+  const [reviews, setReviews] = useState<any[]>([])
   const [selectedPatient, setSelectedPatient] = useState<any>(null)
 
   useEffect(() => {
     fetch('/api/admin/reports').then((r) => r.json()).then(setReports)
+    fetch('/api/reviews').then((r) => r.json()).then(setReviews)
   }, [])
 
   if (!reports) return <div className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0a0a0f', paddingTop: '64px' }}><p style={{ color: '#8888aa' }}>Loading...</p></div>
@@ -171,6 +173,43 @@ export default function AdminReports() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Reviews */}
+        <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', padding: '24px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#f0f0ff' }}><MessageSquare size={16} style={{ color: '#6366f1', marginRight: '8px' }} /> Patient Reviews</h2>
+          </div>
+          {reviews.length === 0 ? (
+            <p style={{ color: '#555570', fontSize: '14px', textAlign: 'center', padding: '20px' }}>No reviews yet.</p>
+          ) : (
+            <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(10,10,15,0.5)' }}>
+                    <th style={{ textAlign: 'left', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Patient</th>
+                    <th style={{ textAlign: 'left', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Doctor</th>
+                    <th style={{ textAlign: 'center', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Rating</th>
+                    <th style={{ textAlign: 'left', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Comment</th>
+                    <th style={{ textAlign: 'right', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reviews.map((r: any) => (
+                    <tr key={r.id} style={{ borderTop: '1px solid rgba(42,42,58,0.5)' }}>
+                      <td style={{ padding: '10px 16px', color: '#f0f0ff', fontWeight: '500', fontSize: '13px' }}>{r.patient?.name}</td>
+                      <td style={{ padding: '10px 16px', color: '#8888aa', fontSize: '13px' }}>{r.doctor?.user?.name}</td>
+                      <td style={{ padding: '10px 16px', textAlign: 'center' }}>
+                        <span style={{ color: '#f59e0b', fontSize: '13px' }}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
+                      </td>
+                      <td style={{ padding: '10px 16px', color: '#8888aa', fontSize: '13px', maxWidth: '250px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.comment || '-'}</td>
+                      <td style={{ padding: '10px 16px', textAlign: 'right', color: '#555570', fontSize: '12px' }}>{new Date(r.created_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Recent Appointments */}
