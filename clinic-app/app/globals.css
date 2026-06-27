@@ -33,7 +33,6 @@ html {
 }
 
 body {
-  background: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
@@ -42,12 +41,11 @@ body {
 
 /* Grid background pattern */
 .grid-bg {
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-    radial-gradient(circle at 50% 50%, var(--grid-dot) 1px, transparent 1px);
-  background-size: 40px 40px, 40px 40px, 40px 40px;
-  background-color: var(--bg-primary);
+  background:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+    #0a0a0f;
+  background-size: 40px 40px;
 }
 
 /* Glow effects */
