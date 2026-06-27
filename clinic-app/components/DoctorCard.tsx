@@ -1,27 +1,40 @@
 import Link from 'next/link'
-import StatusBadge from '@/components/ui/StatusBadge'
+import { useState } from 'react'
+import { DollarSign, Star } from 'lucide-react'
 
 interface Doctor {
-  id: number
-  user: { name: string; email: string }
-  specialization: string
-  experience: number
-  fee: number
+  id: number; user: { name: string; email: string }; specialization: string; experience: number; fee: number; averageRating?: number; totalReviews?: number
 }
 
 export default function DoctorCard({ doctor }: { doctor: Doctor }) {
+  const [hovered, setHovered] = useState(false)
+
   return (
-    <Link href={`/doctors/${doctor.id}`}>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <span className="text-2xl font-bold text-blue-600">
-            {doctor.user.name.charAt(0)}
-          </span>
+    <Link href={`/doctors/${doctor.id}`} style={{ textDecoration: 'none' }}>
+      <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ background: hovered ? 'rgba(30,30,42,0.9)' : 'rgba(22,22,31,0.7)', border: hovered ? '1px solid rgba(99,102,241,0.4)' : '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', padding: '24px', transition: 'all 0.25s ease', boxShadow: hovered ? '0 8px 30px rgba(99,102,241,0.15)' : 'none' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div style={{ width: '56px', height: '56px', background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '22px', fontWeight: '700', color: '#818cf8' }}>{doctor.user.name.charAt(0)}</span>
+          </div>
+          {doctor.averageRating ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(245,158,11,0.12)', padding: '4px 10px', borderRadius: '100px', fontSize: '13px', fontWeight: '600', color: '#f59e0b' }}>
+              <Star size={12} fill="#f59e0b" /> {doctor.averageRating}
+            </div>
+          ) : null}
         </div>
-        <h3 className="font-semibold text-lg">{doctor.user.name}</h3>
-        <p className="text-gray-500 text-sm">{doctor.specialization}</p>
-        <p className="text-gray-400 text-sm">{doctor.experience} years exp.</p>
-        <p className="text-blue-600 font-medium mt-2">${Number(doctor.fee).toFixed(2)}</p>
+        <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#f0f0ff', marginBottom: '4px' }}>{doctor.user.name}</h3>
+        <p style={{ color: '#8888aa', fontSize: '13px', marginBottom: '4px' }}>{doctor.specialization}</p>
+        <p style={{ color: '#555570', fontSize: '13px', marginBottom: '12px' }}>{doctor.experience} years exp.</p>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(99,102,241,0.12)', color: '#818cf8', padding: '4px 12px', borderRadius: '100px', fontSize: '13px', fontWeight: '600' }}>
+            <DollarSign size={12} /> {Number(doctor.fee).toFixed(2)}
+          </div>
+          {doctor.totalReviews ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#555570', fontSize: '12px' }}>
+              ({doctor.totalReviews} review{doctor.totalReviews !== 1 ? 's' : ''})
+            </div>
+          ) : null}
+        </div>
       </div>
     </Link>
   )

@@ -1,14 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import StatusBadge from '@/components/ui/StatusBadge'
+import { ClipboardList } from 'lucide-react'
 
 export default function DoctorAppointments() {
   const [appointments, setAppointments] = useState<any[]>([])
 
   useEffect(() => {
-    fetch('/api/appointments')
-      .then((r) => r.json())
-      .then(setAppointments)
+    fetch('/api/appointments').then((r) => r.json()).then(setAppointments)
   }, [])
 
   const updateStatus = async (id: number, status: string) => {
@@ -17,64 +17,66 @@ export default function DoctorAppointments() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     })
-    setAppointments((prev: any[]) =>
-      prev.map((a) => (a.id === id ? { ...a, status } : a))
-    )
+    setAppointments((prev: any[]) => prev.map((a) => (a.id === id ? { ...a, status } : a)))
   }
 
+  const btnStyle = (bg: string, border: string, color: string) => ({
+    padding: '6px 14px',
+    borderRadius: '8px',
+    fontSize: '12px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    border: `1px solid ${border}`,
+    background: bg,
+    color,
+    transition: 'all 0.2s',
+  })
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">Appointments</h1>
-      <div className="space-y-4">
-        {appointments.map((appt: any) => (
-          <div key={appt.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="font-medium">{appt.patient?.name}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(appt.appointment_date).toLocaleDateString()} at {appt.appointment_time}
-                </p>
-                {appt.reason && <p className="text-sm text-gray-600 mt-1">{appt.reason}</p>}
+    <div className="grid-bg" style={{ minHeight: '100vh', backgroundColor: '#0a0a0f', padding: '100px 24px' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
+          <ClipboardList size={24} style={{ color: '#6366f1' }} />
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-0.5px' }}>Appointments</h1>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {appointments.map((appt: any) => (
+            <div key={appt.id} style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '14px', padding: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <p style={{ fontWeight: '600', color: '#f0f0ff', fontSize: '15px' }}>{appt.patient?.name}</p>
+                  <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '2px' }}>
+                    {new Date(appt.appointment_date).toLocaleDateString()} at {appt.appointment_time}
+                  </p>
+                  {appt.reason && <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '6px' }}>{appt.reason}</p>}
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  {appt.status === 'pending' && (
+                    <button onClick={() => updateStatus(appt.id, 'confirmed')} style={btnStyle('rgba(99,102,241,0.15)', 'rgba(99,102,241,0.3)', '#818cf8')}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.25)'; e.currentTarget.style.borderColor = '#6366f1' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.15)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)' }}
+                    >Confirm</button>
+                  )}
+                  {(appt.status === 'pending' || appt.status === 'confirmed') && (
+                    <button onClick={() => updateStatus(appt.id, 'completed')} style={btnStyle('rgba(34,211,160,0.15)', 'rgba(34,211,160,0.3)', '#22d3a0')}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,211,160,0.25)'; e.currentTarget.style.borderColor = '#22d3a0' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(34,211,160,0.15)'; e.currentTarget.style.borderColor = 'rgba(34,211,160,0.3)' }}
+                    >Complete</button>
+                  )}
+                  {appt.status === 'pending' && (
+                    <button onClick={() => updateStatus(appt.id, 'cancelled')} style={btnStyle('rgba(244,63,94,0.15)', 'rgba(244,63,94,0.3)', '#f43f5e')}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(244,63,94,0.25)'; e.currentTarget.style.borderColor = '#f43f5e' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(244,63,94,0.15)'; e.currentTarget.style.borderColor = 'rgba(244,63,94,0.3)' }}
+                    >Cancel</button>
+                  )}
+                </div>
               </div>
-              <div className="flex gap-2">
-                {appt.status === 'pending' && (
-                  <button
-                    onClick={() => updateStatus(appt.id, 'confirmed')}
-                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                  >
-                    Confirm
-                  </button>
-                )}
-                {(appt.status === 'pending' || appt.status === 'confirmed') && (
-                  <button
-                    onClick={() => updateStatus(appt.id, 'completed')}
-                    className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
-                  >
-                    Complete
-                  </button>
-                )}
-                {appt.status === 'pending' && (
-                  <button
-                    onClick={() => updateStatus(appt.id, 'cancelled')}
-                    className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
-                  >
-                    Cancel
-                  </button>
-                )}
+              <div style={{ marginTop: '12px' }}>
+                <StatusBadge status={appt.status} />
               </div>
             </div>
-            <div className="mt-2">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                appt.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                appt.status === 'confirmed' ? 'bg-blue-100 text-blue-800' :
-                appt.status === 'completed' ? 'bg-green-100 text-green-800' :
-                'bg-red-100 text-red-800'
-              }`}>
-                {appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}
-              </span>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )

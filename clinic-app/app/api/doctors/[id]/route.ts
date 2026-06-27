@@ -8,10 +8,18 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     include: {
       user: { select: { id: true, name: true, email: true, phone: true } },
       availability: true,
+      reviews: {
+        include: { patient: { select: { name: true } } },
+        orderBy: { created_at: 'desc' },
+      },
     },
   })
   if (!doctor) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return NextResponse.json(doctor)
+
+  const ratings = doctor.reviews.map((r) => r.rating)
+  const averageRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
+
+  return NextResponse.json({ ...doctor, averageRating: Math.round(averageRating * 10) / 10 })
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {

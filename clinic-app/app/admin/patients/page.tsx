@@ -1,46 +1,46 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Users } from 'lucide-react'
 
 export default function AdminPatients() {
   const [patients, setPatients] = useState<any[]>([])
 
   useEffect(() => {
-    fetch('/api/doctors')
-      .then(() => {})
-    fetch('/api/appointments')
-      .then((r) => r.json())
-      .then((apps) => {
-        const unique = new Map()
-        apps.forEach((a: any) => {
-          if (a.patient) unique.set(a.patient.email, a.patient)
-        })
-        setPatients(Array.from(unique.values()))
-      })
+    fetch('/api/appointments').then((r) => r.json()).then((apps) => {
+      const unique = new Map()
+      apps.forEach((a: any) => { if (a.patient) unique.set(a.patient.email, a.patient) })
+      setPatients(Array.from(unique.values()))
+    })
   }, [])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">Manage Patients</h1>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Name</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Email</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {patients.map((p: any) => (
-              <tr key={p.email} className="border-t">
-                <td className="px-6 py-4">{p.name}</td>
-                <td className="px-6 py-4">{p.email}</td>
-                <td className="px-6 py-4">{p.phone || '-'}</td>
+    <div className="grid-bg" style={{ minHeight: '100vh', backgroundColor: '#0a0a0f', padding: '100px 24px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
+          <Users size={24} style={{ color: '#6366f1' }} />
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-0.5px' }}>Manage Patients</h1>
+        </div>
+        <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: 'rgba(10,10,15,0.5)' }}>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Name</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Email</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Phone</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {patients.map((p: any) => (
+                <tr key={p.email} style={{ borderTop: '1px solid rgba(42,42,58,0.5)' }}>
+                  <td style={{ padding: '14px 20px', color: '#f0f0ff', fontWeight: '500', fontSize: '14px' }}>{p.name}</td>
+                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{p.email}</td>
+                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{p.phone || '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

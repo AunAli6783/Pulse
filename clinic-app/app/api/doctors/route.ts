@@ -7,9 +7,18 @@ export async function GET() {
     where: { is_active: true },
     include: {
       user: { select: { id: true, name: true, email: true, phone: true } },
+      reviews: { select: { rating: true } },
     },
   })
-  return NextResponse.json(doctors)
+
+  const result = doctors.map((doc) => {
+    const ratings = doc.reviews.map((r) => r.rating)
+    const avgRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
+    const { reviews, ...rest } = doc
+    return { ...rest, averageRating: Math.round(avgRating * 10) / 10, totalReviews: ratings.length }
+  })
+
+  return NextResponse.json(result)
 }
 
 export async function POST(req: Request) {

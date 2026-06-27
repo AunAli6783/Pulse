@@ -1,22 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import Navbar from "@/components/Navbar";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Clinic Appointment System",
-  description: "Doctor appointment booking and clinic management system",
+  title: "Pulse — Book Doctors Online",
+  description:
+    "Book appointments with top doctors in minutes. Trusted by 50,000+ patients.",
+  keywords: "pulse, clinic, doctor appointment, book doctor, healthcare, online consultation",
+  openGraph: {
+    title: "Pulse — Your Health, Our Priority",
+    description: "Find & book top doctors instantly. Verified specialists across all fields.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,11 +22,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className="h-full">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="grid-bg" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <Providers>
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main style={{ flex: 1 }}>{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>
