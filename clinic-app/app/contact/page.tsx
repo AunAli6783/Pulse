@@ -14,7 +14,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="grid-bg" style={{ minHeight: '100vh', background: '#0a0a0f', padding: '120px 24px' }}>
+    <div className="grid-bg" style={{ minHeight: '100vh', backgroundColor: '#0a0a0f', padding: '120px 24px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '12px' }}>

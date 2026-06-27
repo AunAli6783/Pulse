@@ -56,7 +56,7 @@ export default function Home() {
   }, [session, user, router])
 
   return (
-    <div style={{ paddingTop: '64px', background: '#0a0a0f', minHeight: '100vh' }}>
+    <div className="grid-bg" style={{ paddingTop: '64px', backgroundColor: '#0a0a0f', minHeight: '100vh' }}>
       <section className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', padding: '80px 24px' }}>
         <div style={{ position: 'absolute', top: '15%', left: '10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '20%', right: '8%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />

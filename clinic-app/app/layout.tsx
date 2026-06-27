@@ -31,7 +31,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#0a0a0f" }}>
+      <body className="grid-bg" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <Providers>
           <Navbar />
           <main style={{ flex: 1 }}>{children}</main>

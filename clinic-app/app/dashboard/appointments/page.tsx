@@ -10,7 +10,7 @@ export default function AppointmentsPage() {
   useEffect(() => { fetch('/api/appointments').then((r) => r.json()).then(setAppointments) }, [])
 
   return (
-    <div className="grid-bg" style={{ minHeight: '100vh', background: '#0a0a0f', padding: '100px 24px' }}>
+    <div className="grid-bg" style={{ minHeight: '100vh', backgroundColor: '#0a0a0f', padding: '100px 24px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
           <Calendar size={24} style={{ color: '#6366f1' }} />
