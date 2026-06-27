@@ -29,10 +29,10 @@ export default function BookAppointmentPage() {
     if (res.ok) router.push('/dashboard/appointments')
   }
 
-  if (!doctor) return <div className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0f' }}><p style={{ color: '#8888aa' }}>Loading...</p></div>
+  if (!doctor) return <div className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0a0a0f' }}><p style={{ color: '#8888aa' }}>Loading...</p></div>
 
   return (
-    <div className="grid-bg" style={{ minHeight: '100vh', background: '#0a0a0f', padding: '100px 24px' }}>
+    <div className="grid-bg" style={{ minHeight: '100vh', backgroundColor: '#0a0a0f', padding: '100px 24px' }}>
       <div style={{ maxWidth: '560px', margin: '0 auto' }}>
         <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '20px', padding: '36px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>

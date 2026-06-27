@@ -21,7 +21,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', paddingTop: '80px', background: '#0a0a0f' }}>
+    <div className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', paddingTop: '80px', backgroundColor: '#0a0a0f' }}>
       <div style={{ background: 'rgba(22,22,31,0.9)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '20px', padding: '40px', width: '100%', maxWidth: '420px', backdropFilter: 'blur(12px)' }}>
         <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#f0f0ff', textAlign: 'center', marginBottom: '8px', letterSpacing: '-0.5px' }}>Create Account</h1>
         <p style={{ color: '#8888aa', textAlign: 'center', fontSize: '14px', marginBottom: '32px' }}>Join ClinicApp today</p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "ClinicApp — Book Doctors Online",
@@ -30,10 +31,11 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "#0a0a0f" }}>
+      <body className="grid-bg" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <Providers>
           <Navbar />
           <main style={{ flex: 1 }}>{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>

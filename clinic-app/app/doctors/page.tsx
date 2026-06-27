@@ -12,7 +12,7 @@ export default function DoctorsPage() {
   }, [])
 
   return (
-    <div className="grid-bg" style={{ padding: '100px 24px', maxWidth: '1280px', margin: '0 auto', background: '#0a0a0f', minHeight: '100vh' }}>
+    <div className="grid-bg" style={{ padding: '100px 24px', maxWidth: '1280px', margin: '0 auto', backgroundColor: '#0a0a0f', minHeight: '100vh' }}>
       <div style={{ textAlign: 'center', marginBottom: '56px' }}>
         <span style={{ fontSize: '12px', fontWeight: '600', color: '#6366f1', letterSpacing: '2px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '16px' }}><Stethoscope size={16} /> Doctors</span>
         <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-1.5px', marginBottom: '16px' }}>Our Specialists</h1>

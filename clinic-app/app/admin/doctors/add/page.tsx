@@ -29,7 +29,7 @@ export default function AddDoctorPage() {
   }
 
   return (
-    <div className="grid-bg" style={{ minHeight: '100vh', background: '#0a0a0f', padding: '100px 24px' }}>
+    <div className="grid-bg" style={{ minHeight: '100vh', backgroundColor: '#0a0a0f', padding: '100px 24px' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#f0f0ff', marginBottom: '32px', letterSpacing: '-0.5px' }}>Add Doctor</h1>
         <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '20px', padding: '36px' }}>

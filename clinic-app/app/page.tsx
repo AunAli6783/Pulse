@@ -56,7 +56,7 @@ export default function Home() {
   }, [session, user, router])
 
   return (
-    <div style={{ paddingTop: '64px', background: '#0a0a0f', minHeight: '100vh' }}>
+    <div className="grid-bg" style={{ paddingTop: '64px', backgroundColor: '#0a0a0f', minHeight: '100vh' }}>
       <section className="grid-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', padding: '80px 24px' }}>
         <div style={{ position: 'absolute', top: '15%', left: '10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '20%', right: '8%', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
@@ -152,21 +152,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <footer style={{ borderTop: '1px solid rgba(42,42,58,0.5)', padding: '48px 24px', textAlign: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '24px' }}>
-          <div style={{ width: '30px', height: '30px', background: 'linear-gradient(135deg, #6366f1, #a78bfa)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '800', color: 'white' }}><Heart size={16} /></div>
-          <span style={{ fontSize: '16px', fontWeight: '700', color: '#f0f0ff' }}>Clinic<span style={{ color: '#6366f1' }}>App</span></span>
-        </div>
-        <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '24px' }}>
-          {['Doctors', 'Login', 'Register', 'Dashboard'].map(l => (
-            <Link key={l} href={`/${l.toLowerCase()}`} style={{ color: '#555570', textDecoration: 'none', fontSize: '14px', transition: 'color 0.2s' }}
-              onMouseEnter={e => (e.target as HTMLElement).style.color = '#f0f0ff'}
-              onMouseLeave={e => (e.target as HTMLElement).style.color = '#555570'}>{l}</Link>
-          ))}
-        </div>
-        <p style={{ color: '#333348', fontSize: '13px' }}>© 2026 ClinicApp. All rights reserved.</p>
-      </footer>
     </div>
   )
 }

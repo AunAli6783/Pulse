@@ -18,6 +18,8 @@
   --warning: #f59e0b;
   --danger: #f43f5e;
   --grid-color: rgba(99,102,241,0.06);
+  --grid-line: rgba(255,255,255,0.04);
+  --grid-dot: rgba(255,255,255,0.06);
 }
 
 * {
@@ -41,9 +43,11 @@ body {
 /* Grid background pattern */
 .grid-bg {
   background-image:
-    linear-gradient(var(--grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, var(--grid-dot) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 40px 40px;
+  background-color: var(--bg-primary);
 }
 
 /* Glow effects */

@@ -30,6 +30,7 @@ export default function Navbar() {
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <NavLink href="/doctors">Find Doctors</NavLink>
+            <NavLink href="/contact">Contact</NavLink>
             <NavLink href="/#how-it-works">How It Works</NavLink>
             <NavLink href="/#specialties">Specialties</NavLink>
             {session ? (
