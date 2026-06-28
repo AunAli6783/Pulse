@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "agent": {
+    "test-writer": {
+      "description": "Writes Playwright E2E tests for new features in the clinic project",
+      "mode": "subagent"
+    },
+    "test-runner": {
+      "description": "Runs Playwright tests and reports results",
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": {
+          "npm run dev": "allow",
+          "npx playwright*": "allow",
+          "npx kill-port*": "allow",
+          "*": "deny"
+        }
+      }
+    }
+  }
+}
