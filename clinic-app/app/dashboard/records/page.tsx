@@ -150,7 +150,14 @@ export default function PatientRecords() {
                       title="Download">
                       <Download size={16} />
                     </button>
-                    <button onClick={() => r.file_data && window.open(`data:${r.file_type};base64,${r.file_data}`, '_blank')} style={{ padding: '8px', background: 'rgba(99,102,241,0.1)', border: 'none', borderRadius: '8px', color: '#818cf8', cursor: 'pointer', display: 'flex' }}
+                    <button onClick={() => {
+                      if (!r.file_data) return
+                      const binary = atob(r.file_data)
+                      const bytes = new Uint8Array(binary.length)
+                      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+                      const blob = new Blob([bytes], { type: r.file_type })
+                      window.open(URL.createObjectURL(blob), '_blank')
+                    }} style={{ padding: '8px', background: 'rgba(99,102,241,0.1)', border: 'none', borderRadius: '8px', color: '#818cf8', cursor: 'pointer', display: 'flex' }}
                       title="View">
                       <FileText size={16} />
                     </button>
