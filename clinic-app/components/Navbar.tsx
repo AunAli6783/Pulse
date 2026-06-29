@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
-import { Heart, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3 } from 'lucide-react'
+import { Heart, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3, FileText } from 'lucide-react'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -22,12 +22,14 @@ export default function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/appointments', label: 'Appointments', icon: ClipboardList },
     { href: '/dashboard/prescriptions', label: 'Prescriptions', icon: Pill },
+    { href: '/dashboard/records', label: 'Records', icon: FileText },
   ]
   const doctorLinks = [
     { href: '/doctor/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/doctor/appointments', label: 'Appointments', icon: ClipboardList },
     { href: '/doctor/availability', label: 'Availability', icon: Clock },
     { href: '/doctor/prescriptions', label: 'Prescriptions', icon: Pill },
+    { href: '/doctor/medical-records', label: 'Records', icon: FileText },
   ]
   const adminLinks = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },

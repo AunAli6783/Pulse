@@ -9,7 +9,7 @@ export default function AdminPatients() {
   useEffect(() => {
     fetch('/api/appointments').then((r) => r.json()).then((apps) => {
       const unique = new Map()
-      apps.forEach((a: any) => { if (a.patient) unique.set(a.patient.email, a.patient) })
+      apps.forEach((a: any) => { if (a.patient) unique.set(a.patient.id, a.patient) })
       setPatients(Array.from(unique.values()))
     })
   }, [])
@@ -32,7 +32,7 @@ export default function AdminPatients() {
             </thead>
             <tbody>
               {patients.map((p: any) => (
-                <tr key={p.email} style={{ borderTop: '1px solid rgba(42,42,58,0.5)' }}>
+                <tr key={p.id} style={{ borderTop: '1px solid rgba(42,42,58,0.5)' }}>
                   <td style={{ padding: '14px 20px', color: '#f0f0ff', fontWeight: '500', fontSize: '14px' }}>{p.name}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{p.email}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{p.phone || '-'}</td>
