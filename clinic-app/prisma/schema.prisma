@@ -15,10 +15,11 @@ model User {
   phone     String?
   created_at DateTime @default(now())
 
-  doctor        Doctor?
-  appointments  Appointment[] @relation("patientAppointments")
-  prescriptions Prescription[]
-  reviews       Review[]      @relation("patientReviews")
+  doctor         Doctor?
+  appointments   Appointment[] @relation("patientAppointments")
+  prescriptions  Prescription[]
+  reviews        Review[]      @relation("patientReviews")
+  medicalRecords MedicalRecord[] @relation("patientMedicalRecords")
 }
 
 model Doctor {
@@ -32,11 +33,12 @@ model Doctor {
   avatar         String?
   is_active      Boolean  @default(true)
 
-  user          User           @relation(fields: [user_id], references: [id])
-  availability  Availability[]
-  appointments  Appointment[]
-  prescriptions Prescription[]
-  reviews       Review[]
+  user           User           @relation(fields: [user_id], references: [id])
+  availability   Availability[]
+  appointments   Appointment[]
+  prescriptions  Prescription[]
+  reviews        Review[]
+  medicalRecords MedicalRecord[]
 }
 
 model Availability {
@@ -65,6 +67,7 @@ model Appointment {
   doctor       Doctor       @relation(fields: [doctor_id], references: [id])
   prescription Prescription?
   review       Review?
+  medicalRecords MedicalRecord[]
 }
 
 model Review {
@@ -93,4 +96,23 @@ model Prescription {
   appointment Appointment @relation(fields: [appointment_id], references: [id])
   doctor      Doctor      @relation(fields: [doctor_id], references: [id])
   patient     User        @relation(fields: [patient_id], references: [id])
+}
+
+model MedicalRecord {
+  id           Int      @id @default(autoincrement())
+  patient_id   Int
+  doctor_id    Int
+  appointment_id Int?
+  record_type  String
+  title        String
+  description  String?
+  file_name    String
+  file_size    Int
+  file_type    String
+  file_data    String
+  created_at   DateTime @default(now())
+
+  patient     User         @relation("patientMedicalRecords", fields: [patient_id], references: [id])
+  doctor      Doctor       @relation(fields: [doctor_id], references: [id])
+  appointment Appointment? @relation(fields: [appointment_id], references: [id])
 }

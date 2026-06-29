@@ -4,7 +4,7 @@
 ```bash
 cd clinic-app
 npm install
-cp .env.example .env   # then edit NEXTAUTH_SECRET
+cp .env.example .env   # edit NEXTAUTH_SECRET
 npx prisma generate
 npx tsx prisma/seed.ts
 npm run dev
@@ -14,70 +14,62 @@ npm run dev
 | Command | Action |
 |---------|--------|
 | `npm run dev` | Dev server on :3000 |
-| `npm run build` | Typecheck + production build — run after any edit |
+| `npm run build` | Typecheck + production build |
 | `npm run lint` | ESLint |
-| `npx tsx prisma/seed.ts` | Seed (idempotent — uses `upsert`) |
 | `npx prisma generate` | Regenerate client after schema change |
-| `npx kill-port 3000` | Kill hung dev server |
-| `npx playwright test` | Run all Playwright E2E tests |
-| `npx playwright test --ui` | Run tests with interactive browser UI |
-| `npx playwright show-report` | View HTML test report |
+| `npx prisma db push` | Sync schema to SQLite without migration |
+| `npx tsx prisma/seed.ts` | Seed (idempotent `upsert`) |
+| `npx playwright test tests/cases/` | All 47 E2E tests |
+| `npx playwright test tests/cases/03-doctors.spec.ts` | Single file |
+| `npx playwright test -g "test name"` | Single test by name |
 
 ## Architecture
 
 **Stack:** Next.js 16.2 App Router · Prisma 7 + SQLite (`@prisma/adapter-libsql`) · NextAuth.js 4 JWT credentials · Tailwind CSS v4 · Recharts · Lucide React
 
-**6 models:** User, Doctor, Availability, Appointment, Prescription, Review
+**7 models:** User, Doctor, Availability, Appointment, Prescription, Review, MedicalRecord
 
 **No component library** — pure inline styles (dark theme: `#0a0a0f` bg, `#16161f` cards, `#6366f1` accent).
 
-**Route protection** (middleware.ts — currently warns "middleware is deprecated, use proxy instead"):
+**Route protection** (`middleware.ts` — deprecation warning):
 - `/dashboard/*` → patient only
 - `/doctor/*` → doctor only
 - `/admin/*` → admin only
 
-**Auth:** JWT credentials in `lib/auth.ts`. Session token includes `role`. All accounts: `admin123`.
+**Auth:** JWT credentials in `lib/auth.ts`. Session token includes `role`.
 
-**Prisma adapter:** `PrismaLibSql` in `lib/prisma.ts` — NOT default `prisma-client-js`. Uses `prisma.config.ts` for datasource URL (Prisma 7 convention), not `schema.prisma` `datasource` block.
+## Gotchas
 
-**Seed:** 1 admin + 1 patient + 12 Pakistani doctors (real names, hospitals) + 5 sample reviews. Passwords all `admin123`.
+- **Patient password: `admin231`** — user changed it from seed default `admin123`. Doctor & admin still `admin123`.
+- **Login redirect chain**: form submit `signIn` + `router.push('/')` → home page `useEffect` detects session → `router.push('/{role-dashboard}')`. Final URL: `/dashboard`, `/doctor/dashboard`, or `/admin/dashboard`.
+- **Inputs use `<label>` not `placeholder`** — use `page.fill('input[type="email"]', val)` in Playwright tests.
+- **`backgroundColor` not `background`** — shorthand resets `background-image`, killing the grid pattern.
+- **`.grid-bg` on `<body>`** in `layout.tsx`. Inline styles everywhere; no Tailwind classes in components.
+- **Lucide React icons only** — never emojis.
+- **Hover effects** use `onMouseEnter`/`onMouseLeave` event handlers, not CSS pseudo-classes.
+- **`useSearchParams()` requires `<Suspense>`** boundary wrapper.
+- **SQLite** — no enums, arrays, or JSON columns. Statuses are plain strings. Medical record files stored as base64.
+- **PrismaLibSql adapter** in `lib/prisma.ts` — not default `prisma-client-js`. `prisma.config.ts` sets datasource URL, not `schema.prisma` `datasource` block.
+- **`npm run build`** runs TypeScript check + Turbopack build — the main verify step.
+- **Branch:** `developer` (not `main`).
+- **Code root:** `clinic-app/` subdirectory. `AGENTS.md` and `opencode.json` at repo root `F:\clinic_project/`.
 
-**Navbar role-links** (`Navbar.tsx`): When logged in, shows only the links relevant to that user's role (patient: Dashboard/Appointments/Prescriptions; doctor: +Availability; admin: +Doctors/Patients/Reports). Public links (How It Works/Specialties) hidden when logged in.
+## Tests
 
-## API routes (`app/api/`)
-```
-auth/register|login|me|[...nextauth]
-doctors/[id]
-appointments/[id]
-prescriptions/[id]
-availability/[doctor-id]/[date]
-reviews          # GET with ?doctor_id= (public), ?appointment_id= (check), or session (role-filtered); POST (patient only)
-admin/stats      # Dashboard counts (admin)
-admin/reports    # Monthly/doctors/patients reports (admin)
-```
+Tests in `tests/cases/` (11 spec files, 47 tests). Config at `playwright.config.ts` (auto-starts dev server, 1 worker, Chromium only). Summary in `tests/summary/`.
 
-## Design conventions
-- `backgroundColor` not `background` — the shorthand resets `background-image`, killing the grid pattern
-- `.grid-bg` class on `<body>` in `layout.tsx` for the subtle grid overlay
-- Inline styles over Tailwind classes (project convention, be consistent)
-- Lucide React for icons (never emojis)
-- Cards: `14-16px` border-radius; sections: `100px 24px` padding
-- Use `onMouseEnter`/`onMouseLeave` for hover effects (no CSS hover pseudo-classes with inline styles)
-
-## Key gotchas
-- **`useSearchParams()` requires `<Suspense>`** — wrap in boundary
-- **SQLite** — no enums, arrays, or JSON columns. Statuses stored as plain strings
-- **dev.db is gitignored** — new clones must run `npx tsx prisma/seed.ts`
-- **`npm run build`** runs both TypeScript check + Turbopack build — the main verify step
-- **npm only** — no yarn/pnpm; `package-lock.json` present
-- **Branch name** — `developer` (not `main`)
-- **Project root** — code is in `clinic-app/` subdirectory; `AGENTS.md` and `README.md` are at the repo root `F:\clinic_project/`
-
-## Custom agents (OpenCode)
-
+**Custom agents** (registered in `opencode.json`):
 | Agent | File | Purpose |
 |-------|------|---------|
-| `test-writer` | `.opencode/agents/test-writer.md` | Writes Playwright E2E tests following project conventions |
-| `test-runner` | `.opencode/agents/test-runner.md` | Runs Playwright tests, parses output, reports failures |
+| `test-writer` | `.opencode/agents/test-writer.md` | Writes tests ONLY for changed code (uses `git diff`) |
+| `test-runner` | `.opencode/agents/test-runner.md` | Runs only affected tests, retries only failures, writes summary on 100% pass |
 
-Config: `opencode.json` at repo root. Agents are in `.opencode/agents/`. Tests are in `clinic-app/tests/`. After changing config or agents, **restart OpenCode**.|
+After changing config or agents, **restart OpenCode**.
+
+## Seed accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Patient | patient@clinic.com | admin231 |
+| Doctor | abdulbari@clinic.com | admin123 |
+| Admin | admin@clinic.com | admin123 |

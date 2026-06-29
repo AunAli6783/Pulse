@@ -23,13 +23,13 @@ export async function GET() {
     if (!doctor) return NextResponse.json({ error: 'Doctor not found' }, { status: 404 })
     appointments = await prisma.appointment.findMany({
       where: { doctor_id: doctor.id },
-      include: { patient: { select: { name: true, email: true, phone: true } } },
+      include: { patient: { select: { id: true, name: true, email: true, phone: true } } },
       orderBy: { appointment_date: 'desc' },
     })
   } else {
     appointments = await prisma.appointment.findMany({
       include: {
-        patient: { select: { name: true } },
+        patient: { select: { id: true, name: true } },
         doctor: { include: { user: { select: { name: true } } } },
       },
       orderBy: { appointment_date: 'desc' },
