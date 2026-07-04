@@ -1,4 +1,5 @@
 import StatusBadge from './ui/StatusBadge'
+import { to12h } from '@/lib/time'
 
 interface Doctor {
   user: { name: string }
@@ -30,7 +31,7 @@ export default function AppointmentCard({ appointment }: { appointment: Appointm
             {appointment.doctor?.user.name || appointment.patient?.name}
           </p>
           <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '2px' }}>
-            {date} at {appointment.appointment_time}
+            {date} at {to12h(appointment.appointment_time)}
           </p>
         </div>
         <StatusBadge status={appointment.status} />
