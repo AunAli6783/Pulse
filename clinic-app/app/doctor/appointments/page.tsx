@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import StatusBadge from '@/components/ui/StatusBadge'
+import { to12h } from '@/lib/time'
 import { ClipboardList } from 'lucide-react'
 
 export default function DoctorAppointments() {
@@ -46,7 +47,7 @@ export default function DoctorAppointments() {
                 <div>
                   <p style={{ fontWeight: '600', color: '#f0f0ff', fontSize: '15px' }}>{appt.patient?.name}</p>
                   <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '2px' }}>
-                    {new Date(appt.appointment_date).toLocaleDateString()} at {appt.appointment_time}
+                    {new Date(appt.appointment_date).toLocaleDateString()} at {to12h(appt.appointment_time)}
                   </p>
                   {appt.reason && <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '6px' }}>{appt.reason}</p>}
                 </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Calendar, Pill, Search, User, LayoutDashboard, Clock, CheckCircle, XCircle, Activity, FileText, TrendingUp, ArrowRight } from 'lucide-react'
+import { to12h } from '@/lib/time'
 
 export default function PatientDashboard() {
   const { data: session } = useSession()
@@ -92,7 +93,7 @@ export default function PatientDashboard() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontWeight: '700', color: '#f0f0ff', fontSize: '16px' }}>Dr. {nextAppt.doctor?.user?.name}</p>
-                  <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '2px' }}>{new Date(nextAppt.appointment_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} at {nextAppt.appointment_time}</p>
+                  <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '2px' }}>{new Date(nextAppt.appointment_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} at {to12h(nextAppt.appointment_time)}</p>
                 </div>
                 <Link href="/dashboard/appointments" style={{ padding: '8px 16px', background: 'rgba(99,102,241,0.15)', color: '#818cf8', textDecoration: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: '1px solid rgba(99,102,241,0.2)', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.25)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)' }}

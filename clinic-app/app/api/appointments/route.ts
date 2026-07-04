@@ -48,11 +48,70 @@ export async function POST(req: Request) {
   const { doctor_id, appointment_date, appointment_time, reason } = await req.json()
   const patientId = Number((session.user as any).id)
 
+  if (!appointment_date || !appointment_time) {
+    return NextResponse.json({ error: 'Date and time are required' }, { status: 400 })
+  }
+
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/
+  const timePattern = /^\d{2}:\d{2}$/
+  if (!datePattern.test(appointment_date) || !timePattern.test(appointment_time)) {
+    return NextResponse.json({ error: 'Invalid date or time format' }, { status: 400 })
+  }
+
+  const [y, m, d] = appointment_date.split('-').map(Number)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const apptDate = new Date(y, m - 1, d)
+  if (apptDate < today) {
+    return NextResponse.json({ error: 'Cannot book appointments in the past' }, { status: 400 })
+  }
+
+  const dayOfWeek = apptDate.toLocaleDateString('en-US', { weekday: 'short' })
+
+  const allAvailability = await prisma.availability.findMany({
+    where: {
+      doctor_id: Number(doctor_id),
+      day_of_week: { equals: dayOfWeek },
+    },
+  })
+
+  if (allAvailability.length === 0) {
+    return NextResponse.json({ error: 'Doctor not available on this day' }, { status: 400 })
+  }
+
+  const [timeH, timeM] = appointment_time.split(':').map(Number)
+  const slotMinutes = timeH * 60 + timeM
+
+  const isValidSlot = allAvailability.some((a) => {
+    const [startH, startM] = a.start_time.split(':').map(Number)
+    const [endH, endM] = a.end_time.split(':').map(Number)
+    const startMinutes = startH * 60 + startM
+    const endMinutes = endH * 60 + endM
+    return slotMinutes >= startMinutes && slotMinutes + a.slot_duration <= endMinutes
+  })
+
+  if (!isValidSlot) {
+    return NextResponse.json({ error: 'Selected time is outside available slots' }, { status: 400 })
+  }
+
+  const existing = await prisma.appointment.findFirst({
+    where: {
+      doctor_id: Number(doctor_id),
+      appointment_date: new Date(appointment_date + 'T00:00:00.000Z'),
+      appointment_time,
+      status: { notIn: ['cancelled'] },
+    },
+  })
+
+  if (existing) {
+    return NextResponse.json({ error: 'This time slot is already booked' }, { status: 409 })
+  }
+
   const appointment = await prisma.appointment.create({
     data: {
       patient_id: patientId,
       doctor_id: Number(doctor_id),
-      appointment_date: new Date(appointment_date),
+      appointment_date: new Date(appointment_date + 'T00:00:00.000Z'),
       appointment_time,
       reason,
     },

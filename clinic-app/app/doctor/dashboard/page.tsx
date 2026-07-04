@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import StatusBadge from '@/components/ui/StatusBadge'
 import { ClipboardList, Clock, Pill, User, LayoutDashboard, Star, MessageSquare, FileText, Calendar, Users, TrendingUp, ArrowRight } from 'lucide-react'
+import { to12h } from '@/lib/time'
 
 const links = [
   { href: '/doctor/appointments', title: 'Appointments', desc: 'View all your appointments', icon: ClipboardList, color: '#818cf8' },
@@ -16,7 +17,7 @@ const links = [
 
 export default function DoctorDashboard() {
   const { data: session } = useSession()
-  const [todayApps, setTodayApps] = useState<any[]>([])
+  const [upcomingApps, setUpcomingApps] = useState<any[]>([])
   const [allApps, setAllApps] = useState<any[]>([])
   const [reviews, setReviews] = useState<any>(null)
   const [records, setRecords] = useState<any[]>([])
@@ -25,7 +26,10 @@ export default function DoctorDashboard() {
     fetch('/api/appointments').then((r) => r.json()).then((apps) => {
       setAllApps(apps)
       const today = new Date().toISOString().split('T')[0]
-      setTodayApps(apps.filter((a: any) => a.appointment_date?.startsWith(today)))
+      const upcoming = apps
+        .filter((a: any) => a.appointment_date >= today && a.status !== 'cancelled' && a.status !== 'completed')
+        .sort((a: any, b: any) => a.appointment_date.localeCompare(b.appointment_date) || a.appointment_time.localeCompare(b.appointment_time))
+      setUpcomingApps(upcoming)
     })
     fetch('/api/reviews').then((r) => r.json()).then(setReviews)
     fetch('/api/medical-records').then((r) => r.json()).then(setRecords)
@@ -144,41 +148,44 @@ export default function DoctorDashboard() {
           })}
         </div>
 
-        {/* Today's Appointments */}
+        {/* Upcoming Appointments */}
         <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Calendar size={18} style={{ color: '#6366f1' }} /> Today's Appointments
+              <Calendar size={18} style={{ color: '#6366f1' }} /> Upcoming Appointments
             </h2>
-            {todayApps.length > 0 && (
+            {upcomingApps.length > 0 && (
               <span style={{ fontSize: '13px', padding: '4px 12px', background: 'rgba(99,102,241,0.15)', color: '#818cf8', borderRadius: '100px', fontWeight: '600' }}>
-                {todayApps.length} {todayApps.length === 1 ? 'appointment' : 'appointments'}
+                {upcomingApps.length} {upcomingApps.length === 1 ? 'appointment' : 'appointments'}
               </span>
             )}
           </div>
-          {todayApps.length === 0 ? (
+          {upcomingApps.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px', color: '#555570' }}>
               <Calendar size={32} style={{ color: '#353550', marginBottom: '12px' }} />
-              <p style={{ fontSize: '14px' }}>No appointments today. Enjoy your day!</p>
+              <p style={{ fontSize: '14px' }}>No upcoming appointments.</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {todayApps.map((appt: any) => (
-                <div key={appt.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(10,10,15,0.5)', border: '1px solid rgba(42,42,58,0.5)', borderRadius: '12px', padding: '14px 18px', transition: 'all 0.2s' }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)'}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(42,42,58,0.5)'}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '36px', height: '36px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <User size={16} style={{ color: '#818cf8' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '540px', overflowY: 'auto' }}>
+              {upcomingApps.map((appt: any) => {
+                const dateStr = new Date(appt.appointment_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+                return (
+                  <div key={appt.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(10,10,15,0.5)', border: '1px solid rgba(42,42,58,0.5)', borderRadius: '12px', padding: '14px 18px', transition: 'all 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(42,42,58,0.5)'}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '36px', height: '36px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <User size={16} style={{ color: '#818cf8' }} />
+                      </div>
+                      <div>
+                        <p style={{ fontWeight: '600', color: '#f0f0ff', fontSize: '14px' }}>{appt.patient?.name}</p>
+                        <p style={{ fontSize: '12px', color: '#8888aa', marginTop: '2px' }}>{dateStr} · {to12h(appt.appointment_time)}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p style={{ fontWeight: '600', color: '#f0f0ff', fontSize: '14px' }}>{appt.patient?.name}</p>
-                      <p style={{ fontSize: '12px', color: '#8888aa', marginTop: '2px' }}>{appt.appointment_time}</p>
-                    </div>
+                    <StatusBadge status={appt.status} />
                   </div>
-                  <StatusBadge status={appt.status} />
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
