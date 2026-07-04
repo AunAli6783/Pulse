@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { BarChart3, TrendingUp, Users, Stethoscope, Calendar, Download, X, Star, MessageSquare } from 'lucide-react'
+import { to12h } from '@/lib/time'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 
 export default function AdminReports() {
@@ -271,7 +272,7 @@ export default function AdminReports() {
                           color: a.status === 'completed' ? '#22d3a0' : a.status === 'cancelled' ? '#f43f5e' : a.status === 'confirmed' ? '#818cf8' : '#f59e0b',
                         }}>{a.status}</span>
                       </div>
-                      <p style={{ color: '#8888aa', fontSize: '12px' }}>{new Date(a.appointment_date).toLocaleDateString()} at {a.appointment_time} · {a.doctor.specialization}</p>
+                      <p style={{ color: '#8888aa', fontSize: '12px' }}>{new Date(a.appointment_date).toLocaleDateString()} at {to12h(a.appointment_time)} · {a.doctor.specialization}</p>
                       {a.reason && <p style={{ color: '#555570', fontSize: '12px', marginTop: '4px' }}>{a.reason}</p>}
                     </div>
                   ))}

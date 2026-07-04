@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import StatusBadge from '@/components/ui/StatusBadge'
+import { to12h } from '@/lib/time'
 import { Calendar } from 'lucide-react'
 
 function AppointmentsContent() {
@@ -66,7 +67,7 @@ function AppointmentsContent() {
                   <td style={{ padding: '14px 20px', color: '#f0f0ff', fontWeight: '500', fontSize: '14px' }}>{a.patient?.name}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{a.doctor?.user?.name}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{new Date(a.appointment_date).toLocaleDateString()}</td>
-                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{a.appointment_time}</td>
+                  <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{to12h(a.appointment_time)}</td>
                   <td style={{ padding: '14px 20px' }}><StatusBadge status={a.status} /></td>
                 </tr>
               )))}
