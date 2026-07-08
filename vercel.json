@@ -1,6 +1,0 @@
-{
-  "framework": "nextjs",
-  "buildCommand": "cd clinic-app && npx prisma generate && npm run build",
-  "installCommand": "cd clinic-app && npm install",
-  "outputDirectory": "clinic-app/.next"
-}
