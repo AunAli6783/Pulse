@@ -10,7 +10,7 @@ export async function GET() {
     orderBy: { appointment_date: 'desc' },
   })
 
-  const completed = appointments.filter((a) => a.status === 'completed')
+  const completed = appointments.filter((a: any) => a.status === 'completed')
 
   const monthlyMap = new Map<string, { count: number; revenue: number }>()
   for (const a of completed) {
