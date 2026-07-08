@@ -126,8 +126,9 @@ export default function BookAppointmentPage() {
         {/* Doctor info header */}
         <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '20px', padding: '24px 32px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '56px', height: '56px', background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(129,140,248,0.15))', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Stethoscope size={26} style={{ color: '#818cf8' }} />
+            <div style={{ width: '56px', height: '56px', borderRadius: '16px', overflow: 'hidden', background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(129,140,248,0.15))', border: '1px solid rgba(99,102,241,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {doctor.avatar ? <img src={doctor.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <Stethoscope size={26} style={{ color: '#818cf8' }} />}
             </div>
             <div>
               <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#f0f0ff', letterSpacing: '-0.5px' }}>Dr. {doctor.user.name}</h1>

@@ -23,12 +23,13 @@ export async function PUT(req: Request) {
   }
 
   const userId = Number((session.user as any).id)
-  const { name, email, currentPassword, newPassword } = await req.json()
+  const { name, email, phone, currentPassword, newPassword } = await req.json()
 
   const updateData: Record<string, any> = {}
 
   if (name) updateData.name = name
   if (email) updateData.email = email
+  if (phone !== undefined) updateData.phone = phone
   if (newPassword) {
     if (!currentPassword) {
       return NextResponse.json({ error: 'Current password is required to set a new password' }, { status: 400 })

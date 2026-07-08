@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { User, Save, Eye, EyeOff, Stethoscope, BookOpen, Award, DollarSign } from 'lucide-react'
+import { User, Save, Eye, EyeOff, Stethoscope, BookOpen, Award, DollarSign, Camera } from 'lucide-react'
 
 export default function DoctorProfile() {
   const { data: session } = useSession()
@@ -22,6 +22,8 @@ export default function DoctorProfile() {
   const [experience, setExperience] = useState('')
   const [fee, setFee] = useState('')
   const [bio, setBio] = useState('')
+  const [avatar, setAvatar] = useState('')
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [doctorId, setDoctorId] = useState<number | null>(null)
 
   useEffect(() => {
@@ -37,6 +39,7 @@ export default function DoctorProfile() {
         setExperience(String(d.experience || ''))
         setFee(String(d.fee || ''))
         setBio(d.bio || '')
+        setAvatar(d.avatar || '')
       }
     })
   }, [user])
@@ -62,16 +65,16 @@ export default function DoctorProfile() {
     }
 
     if (doctorId) {
+      const docData: any = { specialization, qualification, experience: Number(experience), fee: Number(fee), bio }
+      if (avatarFile) {
+        const reader = new FileReader()
+        reader.readAsDataURL(avatarFile)
+        await new Promise<void>((resolve) => { reader.onload = () => { docData.avatar = reader.result; resolve() } })
+      }
       await fetch(`/api/doctors/${doctorId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          specialization,
-          qualification,
-          experience: Number(experience),
-          fee: Number(fee),
-          bio,
-        }),
+        body: JSON.stringify(docData),
       })
     }
 
@@ -103,6 +106,20 @@ export default function DoctorProfile() {
               <input value={name} onChange={(e) => setName(e.target.value)} style={inputStyle}
                 onFocus={e => e.target.style.borderColor = '#6366f1'}
                 onBlur={e => e.target.style.borderColor = 'rgba(42,42,58,0.8)'} /></div>
+            {/* Avatar */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', background: 'rgba(99,102,241,0.15)', border: '2px solid rgba(99,102,241,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                {avatar ? <img src={avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : <User size={28} style={{ color: '#818cf8' }} />}
+              </div>
+              <label style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '8px', color: '#818cf8', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
+                <Camera size={14} /> {avatar ? 'Change Photo' : 'Upload Photo'}
+                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) { setAvatarFile(file); setAvatar(URL.createObjectURL(file)) }
+                }} />
+              </label>
+            </div>
             <div><label style={labelStyle}>Email</label>
               <input value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle}
                 onFocus={e => e.target.style.borderColor = '#6366f1'}
