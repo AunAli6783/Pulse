@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { Calendar, Clock, FileText, Stethoscope, MapPin, CheckCircle } from 'lucide-react'
+import { Calendar, Clock, FileText, Stethoscope, MapPin, CheckCircle, CreditCard, ShieldCheck } from 'lucide-react'
 import { to12h, to24h, HOURS12, MINUTES } from '@/lib/time'
 
 const DAYS_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -91,6 +91,12 @@ export default function BookAppointmentPage() {
     }) || ''
   }
 
+  const [userPaid, setUserPaid] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    fetch('/api/user/me').then((r) => r.json()).then((d) => setUserPaid(d.paid))
+  }, [])
+
   const handleBook = async () => {
     const time = slotTime()
     if (!selectedDate || !time) return
@@ -129,9 +135,40 @@ export default function BookAppointmentPage() {
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ color: '#22d3a0', fontSize: '18px', fontWeight: '700' }}>${doctor.fee}</p>
+            <p style={{ color: '#22d3a0', fontSize: '18px', fontWeight: '700' }}>Rs. {doctor.fee}</p>
             <p style={{ color: '#555570', fontSize: '12px' }}>per visit</p>
           </div>
+        </div>
+
+        {/* Payment status banner */}
+        <div style={{
+          background: userPaid ? 'rgba(34,197,94,0.08)' : 'rgba(244,63,94,0.08)',
+          border: `1px solid ${userPaid ? 'rgba(34,197,94,0.25)' : 'rgba(244,63,94,0.25)'}`,
+          borderRadius: '14px', padding: '14px 20px', marginBottom: '28px',
+          display: 'flex', alignItems: 'center', gap: '12px',
+        }}>
+          {userPaid ? <ShieldCheck size={20} style={{ color: '#22c55e', flexShrink: 0 }} /> : <CreditCard size={20} style={{ color: '#f43f5e', flexShrink: 0 }} />}
+          <div style={{ flex: 1 }}>
+            {userPaid === null ? (
+              <p style={{ color: '#8888aa', fontSize: '13px' }}>Checking payment status...</p>
+            ) : userPaid ? (
+              <>
+                <p style={{ color: '#22c55e', fontSize: '13px', fontWeight: '600' }}>Registration Fee Paid ✓</p>
+                <p style={{ color: '#8888aa', fontSize: '12px', marginTop: '2px' }}>Your account is active. Consultation fee of Rs. {doctor.fee} will be collected at the clinic.</p>
+              </>
+            ) : (
+              <>
+                <p style={{ color: '#f43f5e', fontSize: '13px', fontWeight: '600' }}>Registration Fee Pending</p>
+                <p style={{ color: '#8888aa', fontSize: '12px', marginTop: '2px' }}>Please pay the registration fee of Rs. 500 to activate your account and book appointments.</p>
+              </>
+            )}
+          </div>
+          {userPaid === false && (
+            <a href="/payment"
+              style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #6366f1, #818cf8)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', textDecoration: 'none', whiteSpace: 'nowrap', boxShadow: '0 0 15px rgba(99,102,241,0.3)' }}>
+              Pay Now
+            </a>
+          )}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px' }}>

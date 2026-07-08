@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
-import { Heart, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3, FileText } from 'lucide-react'
+import { Heart, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3, FileText, DollarSign } from 'lucide-react'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -22,6 +22,7 @@ export default function Navbar() {
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/appointments', label: 'Appointments', icon: ClipboardList },
     { href: '/dashboard/prescriptions', label: 'Prescriptions', icon: Pill },
+    { href: '/dashboard/payments', label: 'Payments', icon: DollarSign },
     { href: '/dashboard/records', label: 'Records', icon: FileText },
   ]
   const doctorLinks = [

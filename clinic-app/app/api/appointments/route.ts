@@ -15,7 +15,7 @@ export async function GET() {
   if (role === 'patient') {
     appointments = await prisma.appointment.findMany({
       where: { patient_id: userId },
-      include: { doctor: { include: { user: { select: { name: true } } } } },
+      include: { doctor: { include: { user: { select: { name: true } } } }, payment: { select: { id: true, status: true, amount: true } } },
       orderBy: { appointment_date: 'desc' },
     })
   } else if (role === 'doctor') {
@@ -23,14 +23,15 @@ export async function GET() {
     if (!doctor) return NextResponse.json({ error: 'Doctor not found' }, { status: 404 })
     appointments = await prisma.appointment.findMany({
       where: { doctor_id: doctor.id },
-      include: { patient: { select: { id: true, name: true, email: true, phone: true } } },
+      include: { patient: { select: { id: true, name: true, email: true, phone: true, paid: true } }, payment: { select: { id: true, status: true, amount: true } } },
       orderBy: { appointment_date: 'desc' },
     })
   } else {
     appointments = await prisma.appointment.findMany({
       include: {
-        patient: { select: { id: true, name: true } },
+        patient: { select: { id: true, name: true, paid: true } },
         doctor: { include: { user: { select: { name: true } } } },
+        payment: { select: { id: true, status: true, amount: true } },
       },
       orderBy: { appointment_date: 'desc' },
     })

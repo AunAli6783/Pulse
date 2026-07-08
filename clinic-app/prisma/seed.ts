@@ -17,11 +17,17 @@ async function main() {
   console.log('✓ Admin: admin@clinic.com / admin123')
 
   // ── Patient ──
-  await prisma.user.upsert({
+  const patient = await prisma.user.upsert({
     where: { email: 'patient@clinic.com' },
-    update: {},
-    create: { name: 'Ali Ahmed', email: 'patient@clinic.com', password: hash, role: 'patient', phone: '+92-300-1112233' },
+    update: { paid: true },
+    create: { name: 'Ali Ahmed', email: 'patient@clinic.com', password: hash, role: 'patient', phone: '+92-300-1112233', paid: true },
   })
+  const existingRegPayment = await prisma.payment.findFirst({ where: { patient_id: patient.id, type: 'registration' } })
+  if (!existingRegPayment) {
+    await prisma.payment.create({
+      data: { patient_id: patient.id, amount: 500, type: 'registration', status: 'paid', payment_method: 'simulated', paid_at: new Date() },
+    })
+  }
   console.log('✓ Patient: patient@clinic.com / admin123')
 
   // ── Doctors ──
@@ -295,6 +301,29 @@ async function main() {
     }
   }
   console.log('✓ Sample reviews added')
+
+  // ── Sample Payments ──
+  const completedAppts = await prisma.appointment.findMany({
+    where: { status: 'completed' },
+    include: { doctor: true },
+  })
+  for (const appt of completedAppts) {
+    const existing = await prisma.payment.findUnique({ where: { appointment_id: appt.id } })
+    if (!existing) {
+      await prisma.payment.create({
+        data: {
+          appointment_id: appt.id,
+          patient_id: appt.patient_id,
+          doctor_id: appt.doctor_id,
+          amount: appt.doctor.fee,
+          status: Math.random() > 0.4 ? 'paid' : 'pending',
+          payment_method: Math.random() > 0.5 ? 'cash' : 'card',
+          paid_at: Math.random() > 0.4 ? new Date() : null,
+        },
+      })
+    }
+  }
+  console.log('✓ Sample payments added')
 
   await prisma.$disconnect()
   console.log('\n✅ Seed complete! Use password "admin123" for all accounts.')

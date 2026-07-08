@@ -13,12 +13,14 @@ model User {
   password  String
   role      String   @default("patient")
   phone     String?
+  paid      Boolean  @default(false)
   created_at DateTime @default(now())
 
   doctor         Doctor?
   appointments   Appointment[] @relation("patientAppointments")
   prescriptions  Prescription[]
   reviews        Review[]      @relation("patientReviews")
+  payments       Payment[]
   medicalRecords MedicalRecord[] @relation("patientMedicalRecords")
 }
 
@@ -38,6 +40,7 @@ model Doctor {
   appointments   Appointment[]
   prescriptions  Prescription[]
   reviews        Review[]
+  payments       Payment[]
   medicalRecords MedicalRecord[]
 }
 
@@ -67,7 +70,25 @@ model Appointment {
   doctor       Doctor       @relation(fields: [doctor_id], references: [id])
   prescription Prescription?
   review       Review?
+  payment      Payment?
   medicalRecords MedicalRecord[]
+}
+
+model Payment {
+  id             Int      @id @default(autoincrement())
+  appointment_id Int?     @unique
+  patient_id     Int
+  doctor_id      Int?
+  amount         Float
+  type           String   @default("appointment")
+  status         String   @default("pending")
+  payment_method String?
+  paid_at        DateTime?
+  created_at     DateTime @default(now())
+
+  appointment Appointment? @relation(fields: [appointment_id], references: [id])
+  patient     User         @relation(fields: [patient_id], references: [id])
+  doctor      Doctor?      @relation(fields: [doctor_id], references: [id])
 }
 
 model Review {

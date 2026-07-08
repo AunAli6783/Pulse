@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { Calendar, Pill, Search, User, LayoutDashboard, Clock, CheckCircle, XCircle, Activity, FileText, TrendingUp, ArrowRight } from 'lucide-react'
+import { Calendar, Pill, Search, User, LayoutDashboard, Clock, CheckCircle, XCircle, Activity, FileText, TrendingUp, ArrowRight, DollarSign } from 'lucide-react'
 import { to12h } from '@/lib/time'
 
 export default function PatientDashboard() {
@@ -37,6 +37,7 @@ export default function PatientDashboard() {
     { href: '/dashboard/prescriptions', title: 'Prescriptions', desc: 'View your prescriptions', icon: Pill, color: '#22d3a0' },
     { href: '/dashboard/records', title: 'Medical Records', desc: 'Upload and view medical records', icon: FileText, color: '#f59e0b' },
     { href: '/doctors', title: 'Find Doctors', desc: 'Browse and book with specialists', icon: Search, color: '#a78bfa' },
+    { href: '/dashboard/payments', title: 'Payments', desc: 'View your payment history', icon: DollarSign, color: '#22d3a0' },
     { href: '/dashboard/profile', title: 'My Profile', desc: 'Update your personal details', icon: User, color: '#8888aa' },
   ]
 

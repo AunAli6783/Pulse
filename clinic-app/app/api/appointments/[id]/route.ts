@@ -15,7 +15,26 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const appointment = await prisma.appointment.update({
       where: { id: Number(id) },
       data: { status },
+      include: { doctor: true },
     })
+
+    if (status === 'completed') {
+      const existing = await prisma.payment.findUnique({
+        where: { appointment_id: Number(id) },
+      })
+      if (!existing) {
+        await prisma.payment.create({
+          data: {
+            appointment_id: Number(id),
+            patient_id: appointment.patient_id,
+            doctor_id: appointment.doctor_id,
+            amount: appointment.doctor.fee,
+            status: 'pending',
+          },
+        })
+      }
+    }
+
     return NextResponse.json(appointment)
   }
 
