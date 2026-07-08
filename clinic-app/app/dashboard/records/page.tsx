@@ -26,7 +26,7 @@ export default function PatientRecords() {
 
   useEffect(() => {
     fetch('/api/medical-records').then(r => r.json()).then(setRecords).finally(() => setLoading(false))
-    fetch('/api/doctors').then(r => r.json()).then(setDoctors)
+    fetch('/api/doctors').then(r => r.json()).then((d) => setDoctors(d.doctors || d))
   }, [])
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {

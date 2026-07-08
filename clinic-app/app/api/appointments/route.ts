@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { sendBookingConfirmation, sendDoctorNotification } from '@/lib/email'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -15,7 +16,7 @@ export async function GET() {
   if (role === 'patient') {
     appointments = await prisma.appointment.findMany({
       where: { patient_id: userId },
-      include: { doctor: { include: { user: { select: { name: true } } } } },
+      include: { doctor: { include: { user: { select: { name: true } } } }, payment: { select: { id: true, status: true, amount: true } } },
       orderBy: { appointment_date: 'desc' },
     })
   } else if (role === 'doctor') {
@@ -23,14 +24,15 @@ export async function GET() {
     if (!doctor) return NextResponse.json({ error: 'Doctor not found' }, { status: 404 })
     appointments = await prisma.appointment.findMany({
       where: { doctor_id: doctor.id },
-      include: { patient: { select: { id: true, name: true, email: true, phone: true } } },
+      include: { patient: { select: { id: true, name: true, email: true, phone: true, paid: true } }, payment: { select: { id: true, status: true, amount: true } } },
       orderBy: { appointment_date: 'desc' },
     })
   } else {
     appointments = await prisma.appointment.findMany({
       include: {
-        patient: { select: { id: true, name: true } },
+        patient: { select: { id: true, name: true, paid: true } },
         doctor: { include: { user: { select: { name: true } } } },
+        payment: { select: { id: true, status: true, amount: true } },
       },
       orderBy: { appointment_date: 'desc' },
     })
@@ -115,7 +117,11 @@ export async function POST(req: Request) {
       appointment_time,
       reason,
     },
+    include: { patient: { select: { name: true, email: true } }, doctor: { include: { user: { select: { name: true, email: true } } } } },
   })
+
+  sendBookingConfirmation(appointment.patient.email, appointment.patient.name, appointment.doctor.user.name, appointment_date, appointment_time)
+  sendDoctorNotification(appointment.doctor.user.email, appointment.doctor.user.name, appointment.patient.name, appointment_date, appointment_time)
 
   return NextResponse.json(appointment)
 }

@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { BarChart3, TrendingUp, Users, Stethoscope, Calendar, Download, X, Star, MessageSquare } from 'lucide-react'
+import { BarChart3, TrendingUp, Users, Stethoscope, Calendar, Download, X, Star, MessageSquare, DollarSign } from 'lucide-react'
 import { to12h } from '@/lib/time'
+import PaymentBadge from '@/components/ui/PaymentBadge'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 
 export default function AdminReports() {
@@ -211,6 +212,47 @@ export default function AdminReports() {
               </table>
             </div>
           )}
+        </div>
+
+        {/* Payments Overview */}
+        <div style={{ background: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '16px', padding: '24px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '700', color: '#f0f0ff' }}><DollarSign size={16} style={{ color: '#22d3a0', marginRight: '8px' }} /> Payment Records</h2>
+            <button onClick={() => exportCSV(reports.payments, 'all-payments', ['Patient', 'Doctor', 'Amount', 'Status', 'Method', 'Date'], (p: any) => [p.patient?.name || '', p.doctor?.user?.name || '', p.amount.toFixed(2), p.status, p.payment_method || '', p.paid_at ? new Date(p.paid_at).toLocaleDateString() : ''])}
+              style={{ background: 'none', border: 'none', color: '#818cf8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: '600' }}>
+              <Download size={14} /> CSV
+            </button>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: 'rgba(10,10,15,0.5)' }}>
+                  <th style={{ textAlign: 'left', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Patient</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Doctor</th>
+                  <th style={{ textAlign: 'right', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Amount</th>
+                  <th style={{ textAlign: 'center', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Status</th>
+                  <th style={{ textAlign: 'center', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Method</th>
+                  <th style={{ textAlign: 'right', padding: '10px 16px', fontWeight: '600', color: '#8888aa', fontSize: '12px', letterSpacing: '0.5px' }}>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reports.payments?.length > 0 ? (
+                  reports.payments.map((p: any) => (
+                    <tr key={p.id} style={{ borderTop: '1px solid rgba(42,42,58,0.5)' }}>
+                      <td style={{ padding: '10px 16px', color: '#f0f0ff', fontWeight: '500', fontSize: '13px' }}>{p.patient?.name}</td>
+                      <td style={{ padding: '10px 16px', color: '#8888aa', fontSize: '13px' }}>{p.doctor?.user?.name}</td>
+                      <td style={{ padding: '10px 16px', textAlign: 'right', color: '#22d3a0', fontWeight: '700', fontSize: '13px' }}>${p.amount.toFixed(2)}</td>
+                      <td style={{ padding: '10px 16px', textAlign: 'center' }}><PaymentBadge status={p.status} compact /></td>
+                      <td style={{ padding: '10px 16px', textAlign: 'center', color: '#8888aa', fontSize: '13px', textTransform: 'capitalize' }}>{p.payment_method || '-'}</td>
+                      <td style={{ padding: '10px 16px', textAlign: 'right', color: '#555570', fontSize: '12px' }}>{p.paid_at ? new Date(p.paid_at).toLocaleDateString() : '-'}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr><td colSpan={6} style={{ padding: '24px', textAlign: 'center', color: '#555570' }}>No payment records yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Recent Appointments */}

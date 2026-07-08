@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Stethoscope, Plus, Trash2 } from 'lucide-react'
+import { Stethoscope, Plus, Trash2, Edit3 } from 'lucide-react'
 
 export default function AdminDoctors() {
   const [doctors, setDoctors] = useState<any[]>([])
 
   useEffect(() => {
-    fetch('/api/doctors').then((r) => r.json()).then(setDoctors)
+    fetch('/api/doctors').then((r) => r.json()).then((d) => setDoctors(d.doctors || d))
   }, [])
 
   const handleDelete = async (id: number) => {
@@ -47,8 +47,13 @@ export default function AdminDoctors() {
                   <td style={{ padding: '14px 20px', color: '#f0f0ff', fontWeight: '500', fontSize: '14px' }}>{doc.user?.name}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{doc.specialization}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{doc.experience} yrs</td>
-                  <td style={{ padding: '14px 20px', color: '#818cf8', fontWeight: '600', fontSize: '14px' }}>${Number(doc.fee).toFixed(2)}</td>
-                  <td style={{ padding: '14px 20px' }}>
+                  <td style={{ padding: '14px 20px', color: '#818cf8', fontWeight: '600', fontSize: '14px' }}>Rs. {Number(doc.fee).toFixed(0)}</td>
+                  <td style={{ padding: '14px 20px', display: 'flex', gap: '8px' }}>
+                    <Link href={`/admin/doctors/${doc.id}/edit`}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(99,102,241,0.12)', color: '#818cf8', border: '1px solid rgba(99,102,241,0.3)', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', textDecoration: 'none' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.25)'; e.currentTarget.style.borderColor = '#6366f1' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(99,102,241,0.12)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)' }}
+                    ><Edit3 size={12} /> Edit</Link>
                     <button onClick={() => handleDelete(doc.id)}
                       style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(244,63,94,0.12)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.3)', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
                       onMouseEnter={e => { e.currentTarget.style.background = 'rgba(244,63,94,0.25)'; e.currentTarget.style.borderColor = '#f43f5e' }}

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
+import { sendWelcome } from '@/lib/email'
+
+const REGISTRATION_FEE = 500
 
 export async function POST(req: Request) {
   try {
@@ -19,6 +22,12 @@ export async function POST(req: Request) {
     const user = await prisma.user.create({
       data: { name, email, password: hashed, phone, role: 'patient' },
     })
+
+    await prisma.payment.create({
+      data: { patient_id: user.id, amount: REGISTRATION_FEE, type: 'registration', status: 'pending' },
+    })
+
+    sendWelcome(user.email, user.name)
 
     return NextResponse.json({ id: user.id, name: user.name, email: user.email, role: user.role })
   } catch {

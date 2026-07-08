@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -23,10 +25,23 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions)
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
   const { id } = await params
   const data = await req.json()
-  const doctor = await prisma.doctor.update({ where: { id: Number(id) }, data })
-  return NextResponse.json(doctor)
+
+  const userId = Number((session.user as any).id)
+  const userRole = (session.user as any).role
+  const doctor = await prisma.doctor.findUnique({ where: { id: Number(id) } })
+  if (!doctor) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  if (userRole !== 'admin' && doctor.user_id !== userId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const updated = await prisma.doctor.update({ where: { id: Number(id) }, data })
+  return NextResponse.json(updated)
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
