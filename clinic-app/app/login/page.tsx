@@ -47,6 +47,9 @@ export default function LoginPage() {
                 onBlur={e => e.target.style.borderColor = 'rgba(42,42,58,0.8)'}
                 required />
             </div>
+            <div style={{ textAlign: 'right', marginTop: '4px' }}>
+              <Link href="/forgot-password" style={{ color: '#818cf8', fontSize: '12px', textDecoration: 'none', fontWeight: '500' }}>Forgot password?</Link>
+            </div>
           </div>
           <button type="submit" style={{ width: '100%', padding: '12px', background: 'linear-gradient(135deg, #6366f1, #818cf8)', color: 'white', border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: 'pointer', boxShadow: '0 0 20px rgba(99,102,241,0.3)', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
             onMouseEnter={e => e.currentTarget.style.boxShadow = '0 0 30px rgba(99,102,241,0.5)'}

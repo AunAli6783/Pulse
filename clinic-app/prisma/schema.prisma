@@ -13,8 +13,10 @@ model User {
   password  String
   role      String   @default("patient")
   phone     String?
-  paid      Boolean  @default(false)
-  created_at DateTime @default(now())
+  paid             Boolean   @default(false)
+  reset_token      String?
+  reset_token_expires DateTime?
+  created_at       DateTime  @default(now())
 
   doctor         Doctor?
   appointments   Appointment[] @relation("patientAppointments")
