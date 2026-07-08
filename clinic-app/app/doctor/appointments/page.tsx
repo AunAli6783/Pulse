@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import StatusBadge from '@/components/ui/StatusBadge'
+import PaymentBadge from '@/components/ui/PaymentBadge'
 import { to12h } from '@/lib/time'
 import { ClipboardList } from 'lucide-react'
 
@@ -72,8 +73,13 @@ export default function DoctorAppointments() {
                   )}
                 </div>
               </div>
-              <div style={{ marginTop: '12px' }}>
+              <div style={{ marginTop: '12px', display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <StatusBadge status={appt.status} />
+                {appt.patient?.paid
+                  ? <span style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>Paid</span>
+                  : <span style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600', background: 'rgba(244,63,94,0.15)', color: '#f43f5e' }}>Unpaid</span>}
+                {appt.payment && <PaymentBadge status={appt.payment.status} compact />}
+                {appt.payment && <span style={{ color: '#8888aa', fontSize: '12px' }}>Rs. {appt.payment.amount.toFixed(0)}</span>}
               </div>
             </div>
           ))}

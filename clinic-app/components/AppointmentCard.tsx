@@ -1,5 +1,12 @@
 import StatusBadge from './ui/StatusBadge'
+import PaymentBadge from './ui/PaymentBadge'
 import { to12h } from '@/lib/time'
+
+interface Payment {
+  id: number
+  status: string
+  amount: number
+}
 
 interface Doctor {
   user: { name: string }
@@ -13,6 +20,7 @@ interface Appointment {
   reason: string | null
   doctor?: Doctor
   patient?: { name: string }
+  payment?: Payment | null
 }
 
 export default function AppointmentCard({ appointment }: { appointment: Appointment }) {
@@ -34,7 +42,10 @@ export default function AppointmentCard({ appointment }: { appointment: Appointm
             {date} at {to12h(appointment.appointment_time)}
           </p>
         </div>
-        <StatusBadge status={appointment.status} />
+        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+          {appointment.payment && <PaymentBadge status={appointment.payment.status} compact />}
+          <StatusBadge status={appointment.status} />
+        </div>
       </div>
       {appointment.reason && (
         <p style={{ fontSize: '13px', color: '#8888aa', marginTop: '8px' }}>{appointment.reason}</p>

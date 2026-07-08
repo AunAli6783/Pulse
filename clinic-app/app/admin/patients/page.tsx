@@ -7,11 +7,7 @@ export default function AdminPatients() {
   const [patients, setPatients] = useState<any[]>([])
 
   useEffect(() => {
-    fetch('/api/appointments').then((r) => r.json()).then((apps) => {
-      const unique = new Map()
-      apps.forEach((a: any) => { if (a.patient) unique.set(a.patient.id, a.patient) })
-      setPatients(Array.from(unique.values()))
-    })
+    fetch('/api/admin/patients').then((r) => r.json()).then(setPatients)
   }, [])
 
   return (
@@ -28,6 +24,7 @@ export default function AdminPatients() {
                 <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Name</th>
                 <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Email</th>
                 <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Phone</th>
+                <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: '600', color: '#8888aa', fontSize: '13px', letterSpacing: '0.5px' }}>Payment</th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +33,11 @@ export default function AdminPatients() {
                   <td style={{ padding: '14px 20px', color: '#f0f0ff', fontWeight: '500', fontSize: '14px' }}>{p.name}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{p.email}</td>
                   <td style={{ padding: '14px 20px', color: '#8888aa', fontSize: '14px' }}>{p.phone || '-'}</td>
+                  <td style={{ padding: '14px 20px', fontSize: '14px' }}>
+                    {p.paid
+                      ? <span style={{ padding: '2px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>Paid</span>
+                      : <span style={{ padding: '2px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', background: 'rgba(244,63,94,0.15)', color: '#f43f5e' }}>Unpaid</span>}
+                  </td>
                 </tr>
               ))}
             </tbody>

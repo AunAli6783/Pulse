@@ -6,8 +6,18 @@ export async function GET() {
     include: {
       doctor: { include: { user: { select: { name: true } } } },
       patient: { select: { id: true, name: true, email: true, phone: true } },
+      payment: { select: { id: true, status: true, amount: true, paid_at: true, payment_method: true } },
     },
     orderBy: { appointment_date: 'desc' },
+  })
+
+  const payments = await prisma.payment.findMany({
+    include: {
+      appointment: { select: { appointment_date: true, status: true } },
+      doctor: { include: { user: { select: { name: true } } } },
+      patient: { select: { name: true } },
+    },
+    orderBy: { created_at: 'desc' },
   })
 
   const completed = appointments.filter((a: any) => a.status === 'completed')
@@ -17,7 +27,7 @@ export async function GET() {
     const month = new Date(a.appointment_date).toISOString().slice(0, 7)
     const existing = monthlyMap.get(month) || { count: 0, revenue: 0 }
     existing.count++
-    existing.revenue += Number(a.doctor.fee)
+    existing.revenue += a.payment?.status === 'paid' ? Number(a.payment.amount) : 0
     monthlyMap.set(month, existing)
   }
 
@@ -32,7 +42,10 @@ export async function GET() {
     const id = a.doctor_id
     const existing = doctorMap.get(id) || { name: a.doctor.user.name, specialization: a.doctor.specialization, total: 0, completed: 0, revenue: 0 }
     existing.total++
-    if (a.status === 'completed') { existing.completed++; existing.revenue += Number(a.doctor.fee) }
+    if (a.status === 'completed') {
+      existing.completed++
+      existing.revenue += a.payment?.status === 'paid' ? Number(a.payment.amount) : 0
+    }
     doctorMap.set(id, existing)
   }
   const doctorPerformance = Array.from(doctorMap.entries())
@@ -52,5 +65,5 @@ export async function GET() {
     .map(([id, data]) => ({ id, ...data }))
     .sort((a, b) => b.totalAppointments - a.totalAppointments)
 
-  return NextResponse.json({ appointments, monthlyData, doctorPerformance, patients })
+  return NextResponse.json({ appointments, payments, monthlyData, doctorPerformance, patients })
 }

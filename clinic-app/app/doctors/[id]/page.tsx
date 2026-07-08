@@ -27,8 +27,9 @@ export default function DoctorDetailPage() {
         {/* Doctor Info */}
         <div style={{ backgroundColor: 'rgba(22,22,31,0.7)', border: '1px solid rgba(42,42,58,0.6)', borderRadius: '20px', padding: '40px', marginBottom: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
-            <div style={{ width: '80px', height: '80px', background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: '32px', fontWeight: '700', color: '#818cf8' }}>{doctor.user.name.charAt(0)}</span>
+            <div style={{ width: '80px', height: '80px', borderRadius: '20px', overflow: 'hidden', background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {doctor.avatar ? <img src={doctor.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <span style={{ fontSize: '32px', fontWeight: '700', color: '#818cf8' }}>{doctor.user.name.charAt(0)}</span>}
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '4px' }}>
