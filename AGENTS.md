@@ -31,10 +31,10 @@ npm run dev
 
 **No component library** — pure inline styles (dark theme: `#0a0a0f` bg, `#16161f` cards, `#6366f1` accent).
 
-**Route protection** (`middleware.ts` — deprecation warning):
-- `/dashboard/*` → patient only
-- `/doctor/*` → doctor only
-- `/admin/*` → admin only
+**Route protection** (server-component layouts using `getServerSession`):
+- `/dashboard/*` → `app/dashboard/layout.tsx` checks `role === 'patient'`
+- `/doctor/*` → `app/doctor/layout.tsx` checks `role === 'doctor'`
+- `/admin/*` → `app/admin/layout.tsx` checks `role === 'admin'`
 
 **Auth:** JWT credentials in `lib/auth.ts`. Session token includes `role`.
 
