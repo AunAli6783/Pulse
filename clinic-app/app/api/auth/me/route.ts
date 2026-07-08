@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { authOptions } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
+import { sendPasswordChangeNotification } from '@/lib/email'
 
 export async function POST() {
   return NextResponse.json({ message: 'Logout via next-auth signOut' })
@@ -42,6 +43,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: 'Current password is incorrect' }, { status: 400 })
     }
     updateData.password = await bcrypt.hash(newPassword, 12)
+    sendPasswordChangeNotification(user.email, user.name)
   }
 
   if (Object.keys(updateData).length === 0) {

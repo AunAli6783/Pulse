@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
+import { sendPasswordReset } from '@/lib/email'
 
 export async function POST(req: Request) {
   try {
@@ -18,11 +19,17 @@ export async function POST(req: Request) {
       data: { reset_token: token, reset_token_expires: expires },
     })
 
+    const hasEmail = !!(process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS)
+
+    if (hasEmail) {
+      await sendPasswordReset(email, token)
+    }
+
     const resetLink = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/reset-password?token=${token}`
 
     return NextResponse.json({
-      message: 'Password reset link generated',
-      resetLink,
+      message: hasEmail ? 'Password reset link sent to your email' : 'Password reset link generated',
+      resetLink: hasEmail ? '' : resetLink,
     })
   } catch {
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })

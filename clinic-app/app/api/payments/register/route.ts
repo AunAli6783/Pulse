@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendPaymentReceipt } from '@/lib/email'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -39,6 +40,9 @@ export async function PUT(req: Request) {
       where: { id: userId },
       data: { paid: true },
     })
+
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, email: true } })
+    if (user) sendPaymentReceipt(user.email, user.name, payment.amount, 'registration fee')
 
     return NextResponse.json({ success: true })
   } catch {

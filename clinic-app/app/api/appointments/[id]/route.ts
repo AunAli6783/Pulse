@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { sendAppointmentUpdate } from '@/lib/email'
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
@@ -15,8 +16,10 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const appointment = await prisma.appointment.update({
       where: { id: Number(id) },
       data: { status },
-      include: { doctor: true },
+      include: { doctor: { include: { user: { select: { name: true, email: true } } } }, patient: { select: { name: true, email: true } } },
     })
+
+    sendAppointmentUpdate(appointment.patient.email, appointment.patient.name, appointment.doctor.user.name, appointment.appointment_date.toISOString(), status)
 
     if (status === 'completed') {
       const existing = await prisma.payment.findUnique({

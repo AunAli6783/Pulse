@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { sendBookingConfirmation, sendDoctorNotification } from '@/lib/email'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -116,7 +117,11 @@ export async function POST(req: Request) {
       appointment_time,
       reason,
     },
+    include: { patient: { select: { name: true, email: true } }, doctor: { include: { user: { select: { name: true, email: true } } } } },
   })
+
+  sendBookingConfirmation(appointment.patient.email, appointment.patient.name, appointment.doctor.user.name, appointment_date, appointment_time)
+  sendDoctorNotification(appointment.doctor.user.email, appointment.doctor.user.name, appointment.patient.name, appointment_date, appointment_time)
 
   return NextResponse.json(appointment)
 }

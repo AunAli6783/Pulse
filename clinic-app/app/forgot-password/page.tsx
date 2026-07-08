@@ -51,11 +51,17 @@ export default function ForgotPasswordPage() {
         ) : (
           <div style={{ textAlign: 'center' }}>
             <CheckCircle size={48} style={{ color: '#22c55e', marginBottom: '16px' }} />
-            <h2 style={{ color: '#f0f0ff', fontSize: '18px', fontWeight: '700', marginBottom: '12px' }}>Reset Link Generated</h2>
-            <p style={{ color: '#8888aa', fontSize: '14px', marginBottom: '16px' }}>Since email is not configured, use this link to reset your password:</p>
-            <div style={{ background: 'rgba(10,10,15,0.6)', border: '1px solid rgba(42,42,58,0.8)', borderRadius: '10px', padding: '12px 16px', marginBottom: '24px', wordBreak: 'break-all' }}>
-              <a href={resetLink} style={{ color: '#818cf8', fontSize: '13px', textDecoration: 'none' }}>{resetLink}</a>
-            </div>
+            <h2 style={{ color: '#f0f0ff', fontSize: '18px', fontWeight: '700', marginBottom: '12px' }}>Check Your Email</h2>
+            <p style={{ color: '#8888aa', fontSize: '14px', marginBottom: '16px' }}>If an account exists with that email, a password reset link has been sent.</p>
+            {resetLink && (
+              <>
+                <p style={{ color: '#555570', fontSize: '12px', marginBottom: '8px' }}>Dev mode — fallback link:</p>
+                <div style={{ background: 'rgba(10,10,15,0.6)', border: '1px solid rgba(42,42,58,0.8)', borderRadius: '10px', padding: '12px 16px', marginBottom: '24px', wordBreak: 'break-all' }}>
+                  <a href={resetLink} style={{ color: '#818cf8', fontSize: '13px', textDecoration: 'none' }}>{resetLink}</a>
+                </div>
+              </>
+            )}
+            {!resetLink && <div style={{ marginBottom: '24px' }} />}
             <Link href="/login" style={{ color: '#818cf8', fontSize: '14px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
               <ArrowLeft size={14} /> Back to Login
             </Link>
