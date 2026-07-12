@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <video controls width="100%" style="max-width: 800px; border-radius: 12px;">
-    <source src="https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946" type="video/mp4">
-  </video>
+
+https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946
+
 </p>
 ---
 
