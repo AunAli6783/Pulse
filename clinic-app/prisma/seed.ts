@@ -1,6 +1,7 @@
-const bcrypt = require('bcryptjs')
-const { PrismaClient } = require('@prisma/client')
-const { PrismaLibSql } = require('@prisma/adapter-libsql')
+import 'dotenv/config'
+import bcrypt from 'bcryptjs'
+import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
 
 async function main() {
   const adapter = new PrismaLibSql({ url: process.env.DATABASE_URL || 'file:./dev.db', authToken: process.env.TURSO_AUTH_TOKEN })
