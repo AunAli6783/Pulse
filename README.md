@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="pulse_demo.mp4">▶️ Watch Demo Video</a>
+  <video src="pulse_demo.mp4" controls width="100%" style="max-width: 800px; border-radius: 12px;"></video>
 </p>
 
 ---
