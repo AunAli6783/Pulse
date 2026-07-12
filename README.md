@@ -4,14 +4,18 @@
 > Patients discover doctors, book appointments, and manage health records.  
 > Doctors control schedules, write prescriptions, and review patient history.  
 > Admins oversee operations, generate reports, and manage the entire ecosystem.
-
 <p align="center">
   <strong>🚀 Live Demo:</strong>
   <a href="https://pulse-clinicapp.vercel.app">https://pulse-clinicapp.vercel.app</a>
 </p>
 
-https://github.com/AunAli6783/Pulse/blob/main/pulse_demo.mp4
+<p align="center">
+  <a href="https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946">
+    <img src="https://img.shields.io/badge/▶-Watch%20Demo%20Video-blue?style=for-the-badge" alt="Watch Demo Video">
+  </a>
+</p>
 
+https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946
 ---
 
 ## Table of Contents
