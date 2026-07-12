@@ -10,9 +10,7 @@
   <a href="https://pulse-clinicapp.vercel.app">https://pulse-clinicapp.vercel.app</a>
 </p>
 
-<p align="center">
-  <video src="https://raw.githubusercontent.com/AunAli6783/Pulse/main/pulse_demo.mp4" controls width="100%" style="max-width: 800px; border-radius: 12px;"></video>
-</p>
+https://github.com/AunAli6783/Pulse/blob/main/pulse_demo.mp4
 
 ---
 
