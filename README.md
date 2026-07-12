@@ -7,7 +7,7 @@
 
 <p align="center">
   <strong>🚀 Live Demo:</strong>
-  <a href="https://pulse-omega-navy.vercel.app">https://pulse-omega-navy.vercel.app</a>
+  <a href="https://pulse-clinicapp.vercel.app">https://pulse-clinicapp.vercel.app</a>
 </p>
 
 ---
@@ -480,5 +480,5 @@ MIT — built as a portfolio project.
   <strong>Built with</strong> Next.js · Prisma · Turso · Tailwind CSS · Vercel
 </p>
 <p align="center">
-  <a href="https://pulse-omega-navy.vercel.app">🌐 Live Demo</a>
+  <a href="https://pulse-clinicapp.vercel.app">🌐 Live Demo</a>
 </p>

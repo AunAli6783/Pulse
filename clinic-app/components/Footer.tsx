@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Heart, ExternalLink, Mail, MapPin, Phone } from 'lucide-react'
+import { Activity, ExternalLink, Mail, MapPin, Phone } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -11,7 +11,7 @@ export default function Footer() {
         <div>
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <div style={{ width: '34px', height: '34px', background: 'linear-gradient(135deg, #6366f1, #a78bfa)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Heart size={18} color="white" />
+              <Activity size={18} color="white" />
             </div>
             <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Pulse</span>
           </Link>

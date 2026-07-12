@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
-import { Heart, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3, FileText, DollarSign } from 'lucide-react'
+import { Activity, LogOut, User, LayoutDashboard, ClipboardList, Pill, Clock, Users, Stethoscope, BarChart3, FileText, DollarSign } from 'lucide-react'
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -48,7 +48,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
           <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '34px', height: '34px', background: 'linear-gradient(135deg, #6366f1, #a78bfa)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}>
-              <Heart size={18} color="white" />
+              <Activity size={18} color="white" />
             </div>
             <span style={{ fontSize: '18px', fontWeight: '700', color: '#f0f0ff', letterSpacing: '-0.3px' }}>Pulse</span>
           </Link>
