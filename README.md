@@ -10,6 +10,12 @@
   <a href="https://pulse-clinicapp.vercel.app">https://pulse-clinicapp.vercel.app</a>
 </p>
 
+<p align="center">
+  <a href="pulse_demo.mp4">▶️ Watch Demo Video</a>
+  <br>
+  <sub>⚠️ Compress with HandBrake (target &lt;100MB) before pushing to GitHub.</sub>
+</p>
+
 ---
 
 ## Table of Contents
