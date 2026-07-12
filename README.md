@@ -10,12 +10,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946">
-    <img src="https://img.shields.io/badge/▶-Watch%20Demo%20Video-blue?style=for-the-badge" alt="Watch Demo Video">
-  </a>
+  <video controls width="100%" style="max-width: 800px; border-radius: 12px;">
+    <source src="https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946" type="video/mp4">
+  </video>
 </p>
-
-https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946
 ---
 
 ## Table of Contents
