@@ -10,6 +10,10 @@
 </p>
 
 <p align="center">
+  <img src="Pulse_Clinic_Poster.jpg" alt="Pulse Clinic Poster" width="100%" style="max-width: 800px; border-radius: 12px;">
+</p>
+
+<p align="center">
 
 https://github.com/user-attachments/assets/63042481-d05a-49b0-8684-964bf5c12946
 
